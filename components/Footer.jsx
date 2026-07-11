@@ -84,14 +84,14 @@ export default function Footer() {
           .ft-bottom { flex-direction: column !important; text-align: center !important; }
         }
       `}</style>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 pb-8">
-        <div className="ft-top grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" style={{ paddingTop: 'clamp(28px,4vw,44px)', paddingBottom: 'clamp(12px,2vw,18px)' }}>
+        <div className="ft-top grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 mb-12" style={{ gap: 'clamp(16px,3vw,36px)' }}>
           <div className="lg:col-span-1">
-            <div className="mb-4">
+            <div style={{ marginBottom: '8px' }}>
               <span className="font-serif font-bold text-2xl text-white block leading-none">IMAKSA</span>
               <span className="text-[10px] uppercase tracking-widest text-[#C9A84C]">Real Estate LLC</span>
             </div>
-            <p className="text-[#F5EFE4]/70 text-sm leading-relaxed mb-5">
+            <p className="text-[#F5EFE4]/70 text-sm leading-relaxed" style={{ marginBottom: '14px' }}>
               Dubai&apos;s trusted real estate partner. Connecting clients with extraordinary homes and smart investments. RERA Licensed.
             </p>
             <div className="flex gap-3 mb-5">
@@ -114,8 +114,8 @@ export default function Footer() {
           </div>
 
           <div>
-            <h3 className="text-[#C9A84C] text-xs font-semibold uppercase tracking-widest mb-5">Properties</h3>
-            <ul className="space-y-3">
+            <h3 className="text-[#C9A84C] text-xs font-semibold uppercase tracking-widest" style={{ marginBottom: '12px' }}>Properties</h3>
+            <ul className="space-y-2">
               {propertiesLinks.map(({ label, href }) => (
                 <li key={href}>
                   <Link href={href} className="text-[#F5EFE4]/70 text-sm hover:text-[#C9A84C] transition-colors duration-200">
@@ -127,8 +127,8 @@ export default function Footer() {
           </div>
 
           <div>
-            <h3 className="text-[#C9A84C] text-xs font-semibold uppercase tracking-widest mb-5">Company</h3>
-            <ul className="space-y-3">
+            <h3 className="text-[#C9A84C] text-xs font-semibold uppercase tracking-widest" style={{ marginBottom: '12px' }}>Company</h3>
+            <ul className="space-y-2">
               {companyLinks.map(({ label, href }) => (
                 <li key={href}>
                   <Link href={href} className="text-[#F5EFE4]/70 text-sm hover:text-[#C9A84C] transition-colors duration-200">
@@ -140,8 +140,8 @@ export default function Footer() {
           </div>
 
           <div>
-            <h3 className="text-[#C9A84C] text-xs font-semibold uppercase tracking-widest mb-5">Contact</h3>
-            <ul className="space-y-3">
+            <h3 className="text-[#C9A84C] text-xs font-semibold uppercase tracking-widest" style={{ marginBottom: '12px' }}>Contact</h3>
+            <ul className="space-y-2">
               <li>
                 <span className="text-[#F5EFE4]/70 text-sm">{addr}</span>
               </li>
@@ -162,7 +162,7 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="ft-bottom border-t border-white/10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-[#F5EFE4]/40">
+        <div className="ft-bottom border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-[#F5EFE4]/40" style={{ paddingTop: 'clamp(12px,2vw,18px)' }}>
           <span>© 2026 IMAKSA Real Estate LLC. All rights reserved.</span>
           <span>RERA Licensed · Dubai, UAE</span>
         </div>

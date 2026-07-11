@@ -135,7 +135,7 @@ function PropertyCard({ property }) {
       {/* Gradient overlay */}
       <div style={{
         position: 'absolute', inset: 0,
-        background: 'linear-gradient(to top, rgba(0,0,0,.88) 0%, rgba(0,0,0,.3) 60%, transparent 100%)',
+        background: 'linear-gradient(to top, rgba(0,0,0,.92) 0%, rgba(0,0,0,.6) 50%, rgba(0,0,0,.2) 100%)',
       }} />
 
       {/* Badge */}

@@ -209,9 +209,6 @@ export default function AboutPage() {
             <div style={{ fontFamily: 'var(--font-fraunces)', fontSize: 'clamp(26px,4vw,48px)', fontWeight: 300, color: '#F5EFE4' }}>
               {stat.valueEl}
             </div>
-            <div style={{ fontSize: 'clamp(7px,1.1vw,9px)', letterSpacing: '3px', textTransform: 'uppercase', color: 'rgba(245,239,228,.5)', marginTop: '8px' }}>
-              {stat.label}
-            </div>
           </motion.div>
         ))}
       </section>
