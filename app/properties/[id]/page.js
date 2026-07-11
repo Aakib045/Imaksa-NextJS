@@ -179,8 +179,8 @@ export default function PropertyDetailPage() {
     async function load() {
       try {
         const [propRes, settingsRes] = await Promise.all([
-          fetch('/api/properties'),
-          fetch('/api/settings'),
+          fetch('/api/properties', { cache: 'no-store' }),
+          fetch('/api/settings', { cache: 'no-store' }),
         ])
         const propData = await propRes.json()
         const settingsData = await settingsRes.json()

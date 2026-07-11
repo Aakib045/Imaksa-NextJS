@@ -42,7 +42,7 @@ export default function BlogPage() {
     if (typeof window !== 'undefined' && localStorage.getItem('imaksa_subscribed')) {
       setSubState('success')
     }
-    fetch('/api/blogs')
+    fetch('/api/blogs', { cache: 'no-store' })
       .then(r => r.json())
       .then(d => { if (d.success) setBlogs(d.blogs || []) })
       .catch(() => {})

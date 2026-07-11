@@ -10,7 +10,9 @@ export async function GET(request, { params }) {
     if (!property) {
       return Response.json({ success: false, error: 'Property not found' }, { status: 404 });
     }
-    return Response.json({ success: true, property });
+    return Response.json({ success: true, property }, {
+      headers: { 'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0' },
+    });
   } catch (error) {
     return Response.json({ success: false, error: 'Failed to fetch property' }, { status: 500 });
   }
@@ -30,9 +32,10 @@ export async function PUT(request, { params }) {
     if (!updated) {
       return Response.json({ success: false, error: 'Property not found' }, { status: 404 });
     }
-    return Response.json({ success: true, property: updated });
+    return Response.json({ success: true, property: updated }, {
+      headers: { 'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0' },
+    });
   } catch (error) {
-    console.error(error);
     return Response.json({ success: false, error: error.message || 'Failed to update property' }, { status: 500 });
   }
 }

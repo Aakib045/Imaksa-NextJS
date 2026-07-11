@@ -60,7 +60,7 @@ export default function Footer() {
   const [settings, setSettings] = useState({})
 
   useEffect(() => {
-    fetch('/api/settings', { next: { revalidate: 3600 } })
+    fetch('/api/settings', { cache: 'no-store' })
       .then(r => r.json())
       .then(d => { if (d.success) setSettings(d.settings || {}) })
       .catch(() => {})

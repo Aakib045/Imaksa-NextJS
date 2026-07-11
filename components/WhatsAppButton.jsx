@@ -3,10 +3,10 @@
 import { useState, useEffect } from 'react'
 
 export default function WhatsAppButton() {
-  const [waNumber, setWaNumber] = useState('971506957009')
+  const [waNumber, setWaNumber] = useState('')
 
   useEffect(() => {
-    fetch('/api/settings', { next: { revalidate: 3600 } })
+    fetch('/api/settings', { cache: 'no-store' })
       .then(r => r.json())
       .then(d => {
         if (d.success && d.settings) {

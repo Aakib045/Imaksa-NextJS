@@ -20,7 +20,7 @@ export async function GET(request) {
     const properties = await Property.find(filter).sort({ order: 1, createdAt: -1 });
 
     return Response.json({ success: true, properties }, {
-      headers: { 'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=120' },
+      headers: { 'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0' },
     });
   } catch (error) {
     return Response.json({ success: false, error: 'Failed to fetch properties' }, { status: 500 });

@@ -75,7 +75,7 @@ export default function AboutPage() {
   const [count98, ref98] = useCountUp(98)
 
   useEffect(() => {
-    fetch('/api/team')
+    fetch('/api/team', { cache: 'no-store' })
       .then(r => r.json())
       .then(d => { if (d.success) setMembers(d.members || []) })
       .catch(() => {})

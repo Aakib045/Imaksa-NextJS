@@ -13,8 +13,6 @@ export async function POST(request) {
     try {
       const resend = new Resend(process.env.RESEND_API_KEY);
 
-      console.log('Sending email - FROM:', process.env.RESEND_FROM, 'TO:', process.env.CLIENT_EMAIL, 'API KEY exists:', !!process.env.RESEND_API_KEY)
-
       await resend.emails.send({
         from: process.env.RESEND_FROM,
         to: process.env.CLIENT_EMAIL,

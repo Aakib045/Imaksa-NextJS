@@ -85,7 +85,7 @@ export default function SellPage() {
   const { is768 } = useBreakpoints()
 
   useEffect(() => {
-    fetch('/api/settings')
+    fetch('/api/settings', { cache: 'no-store' })
       .then(r => r.json())
       .then(d => { if (d.success) setSettings(d.settings || {}) })
       .catch(() => {})
