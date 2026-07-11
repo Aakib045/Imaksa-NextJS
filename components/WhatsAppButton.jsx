@@ -6,7 +6,7 @@ export default function WhatsAppButton() {
   const [waNumber, setWaNumber] = useState('971506957009')
 
   useEffect(() => {
-    fetch('/api/settings')
+    fetch('/api/settings', { next: { revalidate: 3600 } })
       .then(r => r.json())
       .then(d => {
         if (d.success && d.settings) {

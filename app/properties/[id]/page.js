@@ -297,10 +297,13 @@ export default function PropertyDetailPage() {
         @media (max-width: 480px) {
           .similar-grid { grid-template-columns: 1fr !important; }
         }
+        @media (max-width: 768px) {
+          .hero-section { height: 280px !important; }
+        }
       `}</style>
 
       {/* ── IMAGE GALLERY ── */}
-      <div style={{ position: 'relative', zIndex: 1, height: 'clamp(500px,65vw,780px)', overflow: 'hidden', background: '#0D4F4A' }}>
+      <div className="hero-section" style={{ position: 'relative', zIndex: 1, height: 'clamp(250px,50vw,780px)', overflow: 'hidden', background: '#0D4F4A' }}>
         {images.length === 0 ? (
           <div style={{ width: '100%', height: '100%', background: '#0D4F4A' }} />
         ) : (
@@ -313,7 +316,7 @@ export default function PropertyDetailPage() {
                 loading="eager"
                 style={{
                   position: 'absolute', inset: 0, width: '100%', height: '100%',
-                  objectFit: 'cover', opacity: i === galleryIdx ? 1 : 0, transition: 'opacity .5s',
+                  objectFit: 'cover', objectPosition: 'center center', opacity: i === galleryIdx ? 1 : 0, transition: 'opacity .5s',
                 }}
               />
             ))}

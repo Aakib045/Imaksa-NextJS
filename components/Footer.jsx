@@ -60,15 +60,15 @@ export default function Footer() {
   const [settings, setSettings] = useState({})
 
   useEffect(() => {
-    fetch('/api/settings')
+    fetch('/api/settings', { next: { revalidate: 3600 } })
       .then(r => r.json())
       .then(d => { if (d.success) setSettings(d.settings || {}) })
       .catch(() => {})
   }, [])
 
-  const phone = settings.phone || '+971 50 695 7009'
-  const email = settings.email || 'info@imaksa.ae'
-  const addr = settings.addr || 'Dubai, UAE'
+  const phone = settings.phone || ''
+  const email = settings.email || ''
+  const addr = settings.addr || ''
 
   return (
     <footer className="bg-gradient-to-b from-[#0D4F4A] to-[#082E2B] border-t-2 border-[#C9A84C]">
@@ -156,7 +156,7 @@ export default function Footer() {
                 </a>
               </li>
               <li>
-                <span className="text-[#F5EFE4]/50 text-sm">Mon–Sat 9am–7pm</span>
+                <span className="text-[#F5EFE4]/50 text-sm">{settings.hrs || ''}</span>
               </li>
             </ul>
           </div>

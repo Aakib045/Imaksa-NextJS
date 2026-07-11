@@ -43,4 +43,6 @@ body {
 }
 
 * { cursor: none !important; }
-@media (hover: none) { * { cursor: auto !important; } }
+@media (hover: none) and (pointer: coarse) {
+  * { cursor: auto !important; }
+}

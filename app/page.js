@@ -290,7 +290,7 @@ export default function Home() {
       .then(r => r.json())
       .then(d => { if (d.success) setProperties(d.properties || []) })
       .catch(() => { })
-    fetch('/api/settings')
+    fetch('/api/settings', { next: { revalidate: 3600 } })
       .then(r => r.json())
       .then(d => { if (d.success) setSettings(d.settings || {}) })
       .catch(() => { })
@@ -1007,9 +1007,9 @@ export default function Home() {
             </p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
               {[
-                { icon: '📞', label: 'Call Us', value: settings.phone || '+971 4 2669295' },
-                { icon: '💬', label: 'WhatsApp', value: settings.wa || settings.whatsapp || '+971 50 695 7009' },
-                { icon: '✉️', label: 'Email', value: settings.email || 'info@imaksa.ae' },
+                { icon: '📞', label: 'Call Us', value: settings.phone || '' },
+                { icon: '💬', label: 'WhatsApp', value: settings.wa || settings.whatsapp || '' },
+                { icon: '✉️', label: 'Email', value: settings.email || '' },
               ].map(item => (
                 <div key={item.label} style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
                   <span style={{ fontSize: 20 }}>{item.icon}</span>

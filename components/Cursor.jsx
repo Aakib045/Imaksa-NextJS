@@ -1,11 +1,16 @@
 'use client'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 export default function Cursor() {
   const dotRef = useRef(null)
   const ringRef = useRef(null)
+  const [isTouch, setIsTouch] = useState(false)
 
   useEffect(() => {
+    if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
+      setIsTouch(true)
+      return
+    }
     const move = (e) => {
       if (dotRef.current) {
         dotRef.current.style.left = e.clientX + 'px'
@@ -19,6 +24,8 @@ export default function Cursor() {
     window.addEventListener('mousemove', move)
     return () => window.removeEventListener('mousemove', move)
   }, [])
+
+  if (isTouch) return null
 
   return (
     <>

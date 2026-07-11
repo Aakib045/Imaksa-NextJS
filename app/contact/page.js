@@ -63,7 +63,7 @@ function ContactPageContent() {
   const [openFaq, setOpenFaq] = useState(null)
 
   useEffect(() => {
-    fetch('/api/settings')
+    fetch('/api/settings', { next: { revalidate: 3600 } })
       .then(r => r.json())
       .then(d => { if (d.success) setSettings(d.settings || {}) })
       .catch(() => {})
@@ -110,10 +110,10 @@ function ContactPageContent() {
     }
   }
 
-  const addr = settings.addr || '203, Block B, Business Village, Port Saeed, Dubai, UAE'
-  const phoneVal = settings.phone || '+971 50 695 7009'
-  const emailVal = settings.email || 'info@imaksa.ae'
-  const hrs = settings.hrs || 'Monday – Saturday / 9:00 AM – 7:00 PM GST'
+  const addr = settings.addr || ''
+  const phoneVal = settings.phone || ''
+  const emailVal = settings.email || ''
+  const hrs = settings.hrs || ''
   const mapsUrl = settings.maps || DEFAULT_MAPS
 
   const contactItems = [

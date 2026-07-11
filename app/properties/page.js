@@ -67,7 +67,7 @@ function PropertyCard({ property, index, sliderIndexes, nextSlide, prevSlide, go
       }}
     >
       {/* Image area */}
-      <div style={{ height: 'clamp(180px,18vw,240px)', overflow: 'hidden', position: 'relative' }}>
+      <div style={{ height: 'clamp(160px,35vw,260px)', overflow: 'hidden', position: 'relative' }}>
         {images.length === 0 ? (
           <div style={{ width: '100%', height: '100%', background: '#EDE5D8' }} />
         ) : hasMultiple ? (
