@@ -16,7 +16,7 @@ export async function GET(request) {
     const blogs = await Blog.find(filter).sort({ createdAt: -1 });
 
     return Response.json({ success: true, blogs }, {
-      headers: { 'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600' },
+      headers: { 'Cache-Control': 'no-store, no-cache, must-revalidate' },
     });
   } catch (error) {
     return Response.json({ success: false, error: 'Failed to fetch blogs' }, { status: 500 });
