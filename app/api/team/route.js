@@ -7,7 +7,7 @@ export async function GET() {
     await connectDB();
     const members = await Team.find({ active: true }).sort({ order: 1 });
     return Response.json({ success: true, members }, {
-      headers: { 'Cache-Control': 'no-store, no-cache, must-revalidate' },
+      headers: { 'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600' },
     });
   } catch (error) {
     return Response.json({ success: false, error: 'Failed to fetch team members' }, { status: 500 });

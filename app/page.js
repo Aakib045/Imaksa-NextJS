@@ -288,11 +288,11 @@ export default function Home() {
 
   // Fetch properties + settings
   useEffect(() => {
-    fetch('/api/properties', { cache: 'no-store' })
+    fetch('/api/properties')
       .then(r => r.json())
       .then(d => { if (d.success) setProperties(d.properties || []) })
       .catch(() => { })
-    fetch('/api/settings', { cache: 'no-store' })
+    fetch('/api/settings')
       .then(r => r.json())
       .then(d => { if (d.success) setSettings(d.settings || {}) })
       .catch(() => { })

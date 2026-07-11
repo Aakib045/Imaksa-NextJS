@@ -10,7 +10,7 @@ export async function GET() {
       settings = await Settings.create({});
     }
     return Response.json({ success: true, settings }, {
-      headers: { 'Cache-Control': 'no-store, no-cache, must-revalidate' },
+      headers: { 'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600' },
     });
   } catch (error) {
     return Response.json({ success: false, error: 'Failed to fetch settings' }, { status: 500 });

@@ -2,6 +2,7 @@
 const nextConfig = {
   devIndicators: false,
   compress: true,
+  poweredByHeader: false,
   images: {
     remotePatterns: [
       { protocol: 'https', hostname: 'images.unsplash.com' },

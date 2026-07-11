@@ -334,7 +334,7 @@ function PropertiesContent() {
     setLoading(true)
     setError(false)
     try {
-      const res = await fetch('/api/properties', { cache: 'no-store' })
+      const res = await fetch('/api/properties')
       const data = await res.json()
       if (data.success) {
         setAllProperties(data.properties)
