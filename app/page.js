@@ -135,7 +135,7 @@ function PropertyCard({ property }) {
       {/* Gradient overlay */}
       <div style={{
         position: 'absolute', inset: 0,
-        background: 'linear-gradient(to top, rgba(0,0,0,.78) 0%, transparent 55%)',
+        background: 'linear-gradient(to top, rgba(0,0,0,.88) 0%, rgba(0,0,0,.3) 60%, transparent 100%)',
       }} />
 
       {/* Badge */}
@@ -156,18 +156,20 @@ function PropertyCard({ property }) {
             onClick={e => { e.stopPropagation(); setSlideIdx(i => (i - 1 + images.length) % images.length) }}
             style={{
               position: 'absolute', left: 8, top: '50%', transform: 'translateY(-50%)',
-              background: 'rgba(0,0,0,.45)', border: 'none', color: '#fff',
-              width: 28, height: 28, borderRadius: '50%', cursor: 'pointer',
+              background: 'rgba(0,0,0,.6)', border: '2px solid rgba(255,255,255,.4)', color: '#fff',
+              width: 36, height: 36, borderRadius: '50%', cursor: 'pointer',
               fontSize: 14, display: 'flex', alignItems: 'center', justifyContent: 'center',
+              zIndex: 10, opacity: 1,
             }}
           >‹</button>
           <button
             onClick={e => { e.stopPropagation(); setSlideIdx(i => (i + 1) % images.length) }}
             style={{
               position: 'absolute', right: 8, top: '50%', transform: 'translateY(-50%)',
-              background: 'rgba(0,0,0,.45)', border: 'none', color: '#fff',
-              width: 28, height: 28, borderRadius: '50%', cursor: 'pointer',
+              background: 'rgba(0,0,0,.6)', border: '2px solid rgba(255,255,255,.4)', color: '#fff',
+              width: 36, height: 36, borderRadius: '50%', cursor: 'pointer',
               fontSize: 14, display: 'flex', alignItems: 'center', justifyContent: 'center',
+              zIndex: 10, opacity: 1,
             }}
           >›</button>
           <div style={{ position: 'absolute', bottom: 54, left: 0, right: 0, display: 'flex', justifyContent: 'center', gap: 4 }}>
@@ -707,12 +709,6 @@ export default function Home() {
               fontWeight: 300, color: '#0D4F4A',
             }}>
               {stat.valueEl}
-            </div>
-            <div style={{
-              fontSize: 'clamp(8px,.9vw,10px)', letterSpacing: '1.5px',
-              textTransform: 'uppercase', color: '#9B9B8A', marginTop: 8,
-            }}>
-              {stat.label}
             </div>
           </motion.div>
         ))}

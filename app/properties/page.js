@@ -96,19 +96,20 @@ function PropertyCard({ property, index, sliderIndexes, nextSlide, prevSlide, go
                 top: '50%',
                 left: 8,
                 transform: 'translateY(-50%)',
-                background: 'rgba(0,0,0,.65)',
+                background: 'rgba(0,0,0,.6)',
                 border: '2px solid rgba(255,255,255,.4)',
                 color: '#fff',
                 width: 36,
                 height: 36,
                 borderRadius: '50%',
-                zIndex: 6,
+                zIndex: 10,
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 fontSize: 16,
                 lineHeight: 1,
+                opacity: 1,
               }}
             >
               &#8249;
@@ -120,19 +121,20 @@ function PropertyCard({ property, index, sliderIndexes, nextSlide, prevSlide, go
                 top: '50%',
                 right: 8,
                 transform: 'translateY(-50%)',
-                background: 'rgba(0,0,0,.65)',
+                background: 'rgba(0,0,0,.6)',
                 border: '2px solid rgba(255,255,255,.4)',
                 color: '#fff',
                 width: 36,
                 height: 36,
                 borderRadius: '50%',
-                zIndex: 6,
+                zIndex: 10,
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 fontSize: 16,
                 lineHeight: 1,
+                opacity: 1,
               }}
             >
               &#8250;
@@ -174,6 +176,13 @@ function PropertyCard({ property, index, sliderIndexes, nextSlide, prevSlide, go
             style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
           />
         )}
+
+        {/* Gradient overlay */}
+        <div style={{
+          position: 'absolute', inset: 0, pointerEvents: 'none',
+          background: 'linear-gradient(to top, rgba(0,0,0,.88) 0%, rgba(0,0,0,.3) 60%, transparent 100%)',
+          zIndex: 4,
+        }} />
 
         {property.badge && (
           <div
