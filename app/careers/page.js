@@ -64,10 +64,40 @@ export default function CareersPage() {
   const [experience, setExperience] = useState('')
   const [message, setMessage] = useState('')
   const [submitted, setSubmitted] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
+  const [settings, setSettings] = useState({})
   const { is480, is768 } = useBreakpoints()
+
+  useEffect(() => {
+    fetch('/api/settings', { cache: 'no-store' })
+      .then(r => r.json())
+      .then(d => { if (d.success) setSettings(d.settings || {}) })
+      .catch(() => {})
+  }, [])
 
   const scrollToApply = () =>
     document.getElementById('apply')?.scrollIntoView({ behavior: 'smooth' })
+
+  async function handleSubmit() {
+    if (submitting || submitted) return
+    setSubmitting(true)
+    try {
+      await fetch('/api/enquiries', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name,
+          email,
+          phone,
+          interest: `Career Application - ${position}`,
+          message: `Years of Experience: ${experience}\n\n${message}`,
+          source: 'careers',
+        }),
+      })
+      setSubmitted(true)
+    } catch (_) {}
+    setSubmitting(false)
+  }
 
   return (
     <div style={{ fontFamily: 'var(--font-inter)' }}>
@@ -169,7 +199,7 @@ export default function CareersPage() {
               Send us your CV and we&apos;ll be in touch within 48 hours. We welcome applicants from all backgrounds — real estate experience is a bonus, but passion and drive are what we really look for.
             </p>
             <div style={{ fontSize: 'clamp(13px,1.4vw,15px)', color: '#F5EFE4' }}>
-              📧 careers@imaksa.ae
+              📧 {settings.email || ''}
             </div>
           </motion.div>
 
@@ -225,7 +255,7 @@ export default function CareersPage() {
               style={{ ...darkInput, resize: 'vertical' }}
             />
             <div
-              onClick={() => { if (!submitted) setSubmitted(true) }}
+              onClick={handleSubmit}
               style={{
                 width: '100%',
                 background: submitted ? '#27ae60' : '#F5EFE4',
@@ -236,14 +266,14 @@ export default function CareersPage() {
                 fontSize: 'clamp(10px,1.2vw,12px)',
                 letterSpacing: '3px',
                 textTransform: 'uppercase',
-                cursor: submitted ? 'default' : 'pointer',
+                cursor: submitted || submitting ? 'default' : 'pointer',
                 fontWeight: 700,
                 boxSizing: 'border-box',
                 transition: 'all .3s',
                 userSelect: 'none',
               }}
             >
-              {submitted ? 'Application Sent! ✅' : 'Submit Application'}
+              {submitted ? 'Application Sent! ✅' : submitting ? 'Sending…' : 'Submit Application'}
             </div>
           </motion.div>
         </div>

@@ -719,7 +719,7 @@ export default function Home() {
       {/* ══════════════════════════════════════════════════════════
           4. FEATURED PROPERTIES
       ══════════════════════════════════════════════════════════ */}
-      {(!propertiesLoaded || properties.length > 0) && <section style={{ background: '#0D4F4A', padding: 'clamp(40px,5.5vw,80px) clamp(16px,5vw,80px)' }}>
+      {propertiesLoaded && properties.length > 0 && <section style={{ background: '#0D4F4A', padding: 'clamp(40px,5.5vw,80px) clamp(16px,5vw,80px)' }}>
         <motion.div
           initial="hidden" whileInView="visible"
           viewport={{ once: true, amount: 0.2 }}
