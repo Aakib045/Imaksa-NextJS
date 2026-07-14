@@ -312,6 +312,17 @@ function PropertyCard({ property, index, sliderIndexes, nextSlide, prevSlide, go
   )
 }
 
+const INQUIRY_INPUT_STYLE = {
+  padding: '13px 16px',
+  border: '1px solid rgba(13,79,74,.18)',
+  background: '#fff',
+  fontSize: 'clamp(12px,1.1vw,13px)',
+  color: '#0A0A0A',
+  outline: 'none',
+  width: '100%',
+  boxSizing: 'border-box',
+}
+
 function PropertiesContent() {
   const searchParams = useSearchParams()
 
@@ -323,12 +334,52 @@ function PropertiesContent() {
   const [filteredProperties, setFilteredProperties] = useState([])
   const [sliderIndexes, setSliderIndexes] = useState({})
 
+  const [inquiryData, setInquiryData] = useState({ firstName: '', lastName: '', email: '', phone: '', budget: '', message: '' })
+  const [inquirySent, setInquirySent] = useState(false)
+  const [inquiryLoading, setInquiryLoading] = useState(false)
+
+  const typeParam = searchParams.get('type')
+
+  const SOURCE_MAP = {
+    buy: { source: 'buy-inquiry', interest: 'Buy Property' },
+    rent: { source: 'rent-inquiry', interest: 'Rent Property' },
+    offplan: { source: 'offplan-inquiry', interest: 'Off-Plan Investment' },
+  }
+  const { source, interest } = SOURCE_MAP[typeParam] || { source: 'properties-inquiry', interest: 'General Property Inquiry' }
+
+  const EYEBROW_MAP = {
+    buy: 'For Sale',
+    rent: 'For Rent',
+    offplan: 'Off-Plan Properties',
+  }
+  const eyebrow = EYEBROW_MAP[typeParam] || 'Dubai Properties'
+
+  async function handleInquirySubmit() {
+    setInquiryLoading(true)
+    try {
+      await fetch('/api/enquiries', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: `${inquiryData.firstName} ${inquiryData.lastName}`.trim(),
+          email: inquiryData.email,
+          phone: inquiryData.phone,
+          budget: inquiryData.budget,
+          message: inquiryData.message,
+          source,
+          interest,
+        }),
+      })
+      setInquirySent(true)
+    } catch (_) {}
+    setInquiryLoading(false)
+  }
+
   useEffect(() => {
-    const type = searchParams.get('type')
-    if (type && ['buy', 'rent', 'offplan'].includes(type)) {
-      setActiveListingFilter(type)
+    if (typeParam && ['buy', 'rent', 'offplan'].includes(typeParam)) {
+      setActiveListingFilter(typeParam)
     }
-  }, [searchParams])
+  }, [typeParam])
 
   const fetchProperties = async () => {
     setLoading(true)
@@ -418,7 +469,7 @@ function PropertiesContent() {
 
   return (
     <>
-      {/* Hero */}
+      {/* Hero — always shown */}
       <section
         style={{
           background: '#0D4F4A',
@@ -463,164 +514,268 @@ function PropertiesContent() {
         </h1>
       </section>
 
-      {/* Filter Bar 1 — Listing Type */}
-      <div
-        style={{
-          background: '#F5EFE4',
-          padding: 'clamp(14px,2vw,22px) clamp(16px,5vw,72px) 0',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          gap: 'clamp(8px,1.5vw,16px)',
-          flexWrap: 'wrap',
-        }}
-      >
-        {listingButtons.map((btn) =>
-          btn.href ? (
-            <Link key={btn.value} href={btn.href} style={btnBase}>
-              {btn.label}
-            </Link>
-          ) : (
-            <button
-              key={btn.value}
-              onClick={() => setActiveListingFilter(btn.value)}
-              style={activeListingFilter === btn.value ? btnActive : btnBase}
-            >
-              {btn.label}
-            </button>
-          )
-        )}
-      </div>
-
-      {/* Filter Bar 2 — Property Type */}
-      <div
-        style={{
-          background: '#F5EFE4',
-          padding: 'clamp(14px,2vw,22px) clamp(16px,5vw,72px)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          gap: 'clamp(8px,1.5vw,16px)',
-          flexWrap: 'wrap',
-          borderBottom: '1px solid rgba(13,79,74,.1)',
-        }}
-      >
-        {propertyButtons.map((btn) => (
-          <button
-            key={btn.value}
-            onClick={() => setActivePropertyFilter(btn.value)}
-            style={activePropertyFilter === btn.value ? btnActive : btnBase}
-          >
-            {btn.label}
-          </button>
-        ))}
-      </div>
-
-      {/* Properties Section */}
-      <section
-        style={{
-          background: '#FAFAF8',
-          padding: 'clamp(32px,5vw,72px) clamp(16px,5vw,72px)',
-        }}
-      >
-        {!loading && !error && (
+      {/* Loading state — filter bars + skeleton */}
+      {loading && (
+        <>
           <div
             style={{
-              fontSize: 'clamp(10px,1.3vw,12px)',
-              color: '#6B6B60',
-              letterSpacing: 2,
-              textTransform: 'uppercase',
-              marginBottom: 'clamp(20px,3vw,36px)',
+              background: '#F5EFE4',
+              padding: 'clamp(14px,2vw,22px) clamp(16px,5vw,72px) 0',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: 'clamp(8px,1.5vw,16px)',
+              flexWrap: 'wrap',
             }}
           >
-            Showing{' '}
-            <span style={{ color: '#0D4F4A', fontWeight: 500 }}>{filteredProperties.length}</span>{' '}
-            properties
+            {listingButtons.map((btn) =>
+              btn.href ? (
+                <Link key={btn.value} href={btn.href} style={btnBase}>{btn.label}</Link>
+              ) : (
+                <button key={btn.value} style={activeListingFilter === btn.value ? btnActive : btnBase}>{btn.label}</button>
+              )
+            )}
           </div>
-        )}
+          <div
+            style={{
+              background: '#F5EFE4',
+              padding: 'clamp(14px,2vw,22px) clamp(16px,5vw,72px)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: 'clamp(8px,1.5vw,16px)',
+              flexWrap: 'wrap',
+              borderBottom: '1px solid rgba(13,79,74,.1)',
+            }}
+          >
+            {propertyButtons.map((btn) => (
+              <button key={btn.value} style={activePropertyFilter === btn.value ? btnActive : btnBase}>{btn.label}</button>
+            ))}
+          </div>
+          <section style={{ background: '#FAFAF8', padding: 'clamp(32px,5vw,72px) clamp(16px,5vw,72px)' }}>
+            <div className="prop-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 'clamp(12px,2vw,24px)' }}>
+              <SkeletonCard /><SkeletonCard /><SkeletonCard />
+            </div>
+          </section>
+        </>
+      )}
 
-        <div className="prop-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 'clamp(12px,2vw,24px)' }}>
-          {loading ? (
-            <>
-              <SkeletonCard />
-              <SkeletonCard />
-              <SkeletonCard />
-            </>
-          ) : error ? (
-            <div
+      {/* Error state */}
+      {!loading && error && (
+        <section style={{ background: '#FAFAF8', padding: 'clamp(32px,5vw,72px) clamp(16px,5vw,72px)' }}>
+          <div style={{ textAlign: 'center', padding: 'clamp(40px,8vw,80px)' }}>
+            <div style={{ fontSize: 48, marginBottom: 16 }}>&#9888;&#65039;</div>
+            <div style={{ fontFamily: 'var(--font-fraunces)', fontSize: 'clamp(18px,2vw,24px)', color: '#0A0A0A', marginBottom: 8 }}>
+              Could not load properties
+            </div>
+            <button
+              onClick={fetchProperties}
               style={{
-                gridColumn: '1/-1',
-                textAlign: 'center',
-                padding: 'clamp(40px,8vw,80px)',
+                marginTop: 16, background: '#0D4F4A', color: '#F5EFE4',
+                border: 'none', padding: '12px 28px',
+                fontSize: 'clamp(9px,1.1vw,10px)', letterSpacing: 2,
+                textTransform: 'uppercase', cursor: 'pointer', fontFamily: 'inherit',
               }}
             >
-              <div style={{ fontSize: 48, marginBottom: 16 }}>&#9888;&#65039;</div>
-              <div
-                style={{
-                  fontFamily: 'var(--font-fraunces)',
-                  fontSize: 'clamp(18px,2vw,24px)',
-                  color: '#0A0A0A',
-                  marginBottom: 8,
-                }}
-              >
-                Could not load properties
+              Try Again
+            </button>
+          </div>
+        </section>
+      )}
+
+      {/* No properties — Coming Soon + Inquiry Form */}
+      {!loading && !error && allProperties.length === 0 && (
+        <section style={{ background: '#FAFAF8', padding: 'clamp(60px,8vw,100px) clamp(16px,5vw,72px)' }}>
+          <div style={{ maxWidth: 680, margin: '0 auto', textAlign: 'center' }}>
+            <div style={{
+              fontSize: 'clamp(8px,1vw,9px)', letterSpacing: 5,
+              textTransform: 'uppercase', color: '#2E8B84', marginBottom: 16,
+            }}>
+              {eyebrow}
+            </div>
+            <h2 style={{
+              fontFamily: 'var(--font-fraunces)',
+              fontSize: 'clamp(28px,4vw,48px)',
+              fontWeight: 300, color: '#0D4F4A',
+              margin: '0 0 20px', lineHeight: 1.15,
+            }}>
+              Exclusive Properties Coming Soon
+            </h2>
+            <p style={{
+              fontSize: 'clamp(13px,1.2vw,15px)', color: '#6B6B60',
+              lineHeight: 1.8, marginBottom: 44,
+            }}>
+              We are currently curating an exceptional collection of Dubai properties. Register your interest below and our expert consultants will contact you with exclusive listings matching your requirements.
+            </p>
+
+            {inquirySent ? (
+              <div style={{
+                padding: '24px', background: 'rgba(13,79,74,.08)',
+                fontSize: 'clamp(13px,1.2vw,15px)', color: '#0D4F4A', lineHeight: 1.7,
+              }}>
+                &#9989; Thank you! Our team will contact you within 24 hours with exclusive listings.
               </div>
+            ) : (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 14, textAlign: 'left' }}>
+                <div className="inq-row" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
+                  <input
+                    placeholder="First Name"
+                    value={inquiryData.firstName}
+                    onChange={e => setInquiryData(p => ({ ...p, firstName: e.target.value }))}
+                    style={INQUIRY_INPUT_STYLE}
+                  />
+                  <input
+                    placeholder="Last Name"
+                    value={inquiryData.lastName}
+                    onChange={e => setInquiryData(p => ({ ...p, lastName: e.target.value }))}
+                    style={INQUIRY_INPUT_STYLE}
+                  />
+                </div>
+                <div className="inq-row" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
+                  <input
+                    type="email"
+                    placeholder="Email Address"
+                    value={inquiryData.email}
+                    onChange={e => setInquiryData(p => ({ ...p, email: e.target.value }))}
+                    style={INQUIRY_INPUT_STYLE}
+                  />
+                  <input
+                    type="tel"
+                    placeholder="Phone Number"
+                    value={inquiryData.phone}
+                    onChange={e => setInquiryData(p => ({ ...p, phone: e.target.value }))}
+                    style={INQUIRY_INPUT_STYLE}
+                  />
+                </div>
+                <select
+                  value={inquiryData.budget}
+                  onChange={e => setInquiryData(p => ({ ...p, budget: e.target.value }))}
+                  style={{ ...INQUIRY_INPUT_STYLE, color: inquiryData.budget ? '#0A0A0A' : '#9B9B8A' }}
+                >
+                  <option value="">Budget / Price Range</option>
+                  {['Under AED 1M', 'AED 1M–3M', 'AED 3M–7M', 'AED 7M–15M', 'AED 15M–30M', 'AED 30M+'].map(o => (
+                    <option key={o} value={o}>{o}</option>
+                  ))}
+                </select>
+                <textarea
+                  placeholder="Tell us what you're looking for..."
+                  rows={4}
+                  value={inquiryData.message}
+                  onChange={e => setInquiryData(p => ({ ...p, message: e.target.value }))}
+                  style={{ ...INQUIRY_INPUT_STYLE, resize: 'vertical', minHeight: 110 }}
+                />
+                <div
+                  onClick={!inquiryLoading ? handleInquirySubmit : undefined}
+                  style={{
+                    background: '#0D4F4A', color: '#F5EFE4',
+                    padding: '15px', fontSize: 'clamp(9px,1.1vw,10px)',
+                    letterSpacing: '2.5px', textTransform: 'uppercase',
+                    cursor: inquiryLoading ? 'wait' : 'pointer',
+                    textAlign: 'center', userSelect: 'none',
+                  }}
+                >
+                  {inquiryLoading ? 'Sending…' : 'Register Interest →'}
+                </div>
+              </div>
+            )}
+          </div>
+        </section>
+      )}
+
+      {/* Has properties — Filter bars + grid */}
+      {!loading && !error && allProperties.length > 0 && (
+        <>
+          {/* Filter Bar 1 — Listing Type */}
+          <div
+            style={{
+              background: '#F5EFE4',
+              padding: 'clamp(14px,2vw,22px) clamp(16px,5vw,72px) 0',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: 'clamp(8px,1.5vw,16px)',
+              flexWrap: 'wrap',
+            }}
+          >
+            {listingButtons.map((btn) =>
+              btn.href ? (
+                <Link key={btn.value} href={btn.href} style={btnBase}>{btn.label}</Link>
+              ) : (
+                <button
+                  key={btn.value}
+                  onClick={() => setActiveListingFilter(btn.value)}
+                  style={activeListingFilter === btn.value ? btnActive : btnBase}
+                >
+                  {btn.label}
+                </button>
+              )
+            )}
+          </div>
+
+          {/* Filter Bar 2 — Property Type */}
+          <div
+            style={{
+              background: '#F5EFE4',
+              padding: 'clamp(14px,2vw,22px) clamp(16px,5vw,72px)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: 'clamp(8px,1.5vw,16px)',
+              flexWrap: 'wrap',
+              borderBottom: '1px solid rgba(13,79,74,.1)',
+            }}
+          >
+            {propertyButtons.map((btn) => (
               <button
-                onClick={fetchProperties}
-                style={{
-                  marginTop: 16,
-                  background: '#0D4F4A',
-                  color: '#F5EFE4',
-                  border: 'none',
-                  padding: '12px 28px',
-                  fontSize: 'clamp(9px,1.1vw,10px)',
-                  letterSpacing: 2,
-                  textTransform: 'uppercase',
-                  cursor: 'pointer',
-                  fontFamily: 'inherit',
-                }}
+                key={btn.value}
+                onClick={() => setActivePropertyFilter(btn.value)}
+                style={activePropertyFilter === btn.value ? btnActive : btnBase}
               >
-                Try Again
+                {btn.label}
               </button>
+            ))}
+          </div>
+
+          {/* Properties grid */}
+          <section style={{ background: '#FAFAF8', padding: 'clamp(32px,5vw,72px) clamp(16px,5vw,72px)' }}>
+            <div style={{
+              fontSize: 'clamp(10px,1.3vw,12px)', color: '#6B6B60',
+              letterSpacing: 2, textTransform: 'uppercase',
+              marginBottom: 'clamp(20px,3vw,36px)',
+            }}>
+              Showing{' '}
+              <span style={{ color: '#0D4F4A', fontWeight: 500 }}>{filteredProperties.length}</span>{' '}
+              properties
             </div>
-          ) : filteredProperties.length === 0 ? (
-            <div
-              style={{
-                gridColumn: '1/-1',
-                textAlign: 'center',
-                padding: 'clamp(40px,8vw,80px)',
-              }}
-            >
-              <div style={{ fontSize: 48, marginBottom: 16 }}>&#127969;</div>
-              <div
-                style={{
-                  fontFamily: 'var(--font-fraunces)',
-                  fontSize: 'clamp(18px,2vw,24px)',
-                  color: '#0A0A0A',
-                  marginBottom: 8,
-                }}
-              >
-                No properties found
-              </div>
-              <div style={{ fontSize: 'clamp(12px,1.5vw,14px)', color: '#6B6B60' }}>
-                Try selecting a different filter
-              </div>
+
+            <div className="prop-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 'clamp(12px,2vw,24px)' }}>
+              {filteredProperties.length === 0 ? (
+                <div style={{ gridColumn: '1/-1', textAlign: 'center', padding: 'clamp(40px,8vw,80px)' }}>
+                  <div style={{ fontSize: 48, marginBottom: 16 }}>&#127969;</div>
+                  <div style={{ fontFamily: 'var(--font-fraunces)', fontSize: 'clamp(18px,2vw,24px)', color: '#0A0A0A', marginBottom: 8 }}>
+                    No properties found
+                  </div>
+                  <div style={{ fontSize: 'clamp(12px,1.5vw,14px)', color: '#6B6B60' }}>
+                    Try selecting a different filter
+                  </div>
+                </div>
+              ) : (
+                filteredProperties.map((property, index) => (
+                  <PropertyCard
+                    key={property._id}
+                    property={property}
+                    index={index}
+                    sliderIndexes={sliderIndexes}
+                    nextSlide={nextSlide}
+                    prevSlide={prevSlide}
+                    goToSlide={goToSlide}
+                  />
+                ))
+              )}
             </div>
-          ) : (
-            filteredProperties.map((property, index) => (
-              <PropertyCard
-                key={property._id}
-                property={property}
-                index={index}
-                sliderIndexes={sliderIndexes}
-                nextSlide={nextSlide}
-                prevSlide={prevSlide}
-                goToSlide={goToSlide}
-              />
-            ))
-          )}
-        </div>
-      </section>
+          </section>
+        </>
+      )}
     </>
   )
 }
@@ -649,7 +804,7 @@ export default function PropertiesPage() {
         .enquire-btn:hover { background: #1A6B65 !important; }
 
         @media (max-width: 900px) { .prop-grid { grid-template-columns: repeat(2,1fr) !important; } }
-        @media (max-width: 520px) { .prop-grid { grid-template-columns: 1fr !important; } }
+        @media (max-width: 520px) { .prop-grid { grid-template-columns: 1fr !important; } .inq-row { grid-template-columns: 1fr !important; } }
       `}</style>
       <Suspense fallback={null}>
         <PropertiesContent />

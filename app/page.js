@@ -250,6 +250,7 @@ export default function Home() {
 
   // Data
   const [properties, setProperties] = useState([])
+  const [propertiesLoaded, setPropertiesLoaded] = useState(false)
   const [settings, setSettings] = useState({})
   const [activeTab, setActiveTab] = useState('All')
 
@@ -292,6 +293,7 @@ export default function Home() {
       .then(r => r.json())
       .then(d => { if (d.success) setProperties(d.properties || []) })
       .catch(() => { })
+      .finally(() => setPropertiesLoaded(true))
     fetch('/api/settings', { cache: 'no-store' })
       .then(r => r.json())
       .then(d => { if (d.success) setSettings(d.settings || {}) })
@@ -717,7 +719,7 @@ export default function Home() {
       {/* ══════════════════════════════════════════════════════════
           4. FEATURED PROPERTIES
       ══════════════════════════════════════════════════════════ */}
-      <section style={{ background: '#0D4F4A', padding: 'clamp(40px,5.5vw,80px) clamp(16px,5vw,80px)' }}>
+      {(!propertiesLoaded || properties.length > 0) && <section style={{ background: '#0D4F4A', padding: 'clamp(40px,5.5vw,80px) clamp(16px,5vw,80px)' }}>
         <motion.div
           initial="hidden" whileInView="visible"
           viewport={{ once: true, amount: 0.2 }}
@@ -795,7 +797,7 @@ export default function Home() {
             </div>
           )}
         </div>
-      </section>
+      </section>}
 
       {/* ══════════════════════════════════════════════════════════
           5. ABOUT
