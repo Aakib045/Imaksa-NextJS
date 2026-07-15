@@ -68,7 +68,9 @@ export default function Footer() {
 
   const phone = settings.phone || ''
   const email = settings.email || ''
-  const addr = settings.addr || ''
+  const addr = settings.co && settings.addr
+    ? `${settings.co}, ${settings.addr}`
+    : settings.addr || ''
 
   return (
     <footer className="bg-gradient-to-b from-[#0D4F4A] to-[#082E2B] border-t-2 border-[#C9A84C]">

@@ -73,7 +73,7 @@ export default function RootLayout({ children }) {
     telephone: '+97142669295',
     address: {
       '@type': 'PostalAddress',
-      streetAddress: '203, Block B, Business Village, Port Saeed',
+      streetAddress: 'IMAKSA Real Estate LLC, 203, Block B, Business Village, Port Saeed',
       addressLocality: 'Dubai',
       addressCountry: 'AE',
     },

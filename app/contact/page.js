@@ -110,7 +110,9 @@ function ContactPageContent() {
     }
   }
 
-  const addr = settings.addr || ''
+  const addr = settings.co && settings.addr
+    ? `${settings.co}, ${settings.addr}`
+    : settings.addr || ''
   const phoneVal = settings.phone || ''
   const emailVal = settings.email || ''
   const hrs = settings.hrs || ''

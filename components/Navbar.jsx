@@ -6,11 +6,11 @@ import { usePathname, useSearchParams } from 'next/navigation'
 
 const navLinks = [
   { label: 'Home', href: '/' },
+  { label: 'About', href: '/about' },
   { label: 'Buy', href: '/properties?type=buy' },
-  { label: 'Rent', href: '/properties?type=rent' },
   { label: 'Sell', href: '/sell' },
   { label: 'Off-Plan', href: '/properties?type=offplan' },
-  { label: 'About', href: '/about' },
+  { label: 'Rent', href: '/properties?type=rent' },
   { label: 'Blog', href: '/blog' },
   { label: 'Contact', href: '/contact' },
 ]
