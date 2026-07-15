@@ -34,14 +34,6 @@ const WHY_CARDS = [
   { icon: '🤝', title: 'Supportive Culture', desc: `A collaborative, diverse team where everyone supports each other's success — no politics, just results.` },
 ]
 
-const JOBS = [
-  { dept: 'Sales', title: 'Senior Property Consultant', pay: 'Commission + Base' },
-  { dept: 'Sales', title: 'Junior Real Estate Agent', pay: 'Commission + Training' },
-  { dept: 'Investment', title: 'Investment Advisory Specialist', pay: 'Competitive Package' },
-  { dept: 'Marketing', title: 'Digital Marketing Manager', pay: 'Fixed Salary' },
-  { dept: 'Operations', title: 'Property Manager', pay: 'Fixed + Bonus' },
-]
-
 function useBreakpoints() {
   const [bp, setBp] = useState({ is480: false, is768: false })
   useEffect(() => {
@@ -66,12 +58,17 @@ export default function CareersPage() {
   const [submitted, setSubmitted] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [settings, setSettings] = useState({})
+  const [jobs, setJobs] = useState([])
   const { is480, is768 } = useBreakpoints()
 
   useEffect(() => {
     fetch('/api/settings', { cache: 'no-store' })
       .then(r => r.json())
       .then(d => { if (d.success) setSettings(d.settings || {}) })
+      .catch(() => {})
+    fetch('/api/jobs', { cache: 'no-store' })
+      .then(r => r.json())
+      .then(d => { if (d.success) setJobs(d.jobs || []) })
       .catch(() => {})
   }, [])
 
@@ -174,8 +171,14 @@ export default function CareersPage() {
             Current <em style={{ fontStyle: 'italic' }}>Openings</em>
           </motion.h2>
 
-          {JOBS.map((job, i) => (
-            <JobRow key={i} job={job} onApply={scrollToApply} delay={i * 0.08} />
+          {jobs.length === 0 ? (
+            <motion.div {...fadeUp} style={{ textAlign: 'center', padding: 'clamp(36px,5vw,60px) 20px', color: '#0D4F4A', opacity: 0.55 }}>
+              <div style={{ fontSize: 40, marginBottom: 16 }}>💼</div>
+              <div style={{ fontFamily: 'var(--font-fraunces)', fontSize: 'clamp(18px,2vw,22px)', marginBottom: 8 }}>No open positions at the moment.</div>
+              <div style={{ fontSize: 'clamp(13px,1.3vw,15px)' }}>Check back soon!</div>
+            </motion.div>
+          ) : jobs.map((job, i) => (
+            <JobRow key={job._id || i} job={job} onApply={scrollToApply} delay={i * 0.08} />
           ))}
         </div>
       </section>
@@ -233,11 +236,18 @@ export default function CareersPage() {
               onChange={e => setPosition(e.target.value)}
               style={{ ...darkInput, appearance: 'none', WebkitAppearance: 'none', cursor: 'pointer' }}
             >
-              <option>Senior Property Consultant</option>
-              <option>Junior Real Estate Agent</option>
-              <option>Investment Advisory Specialist</option>
-              <option>Digital Marketing Manager</option>
-              <option>Property Manager</option>
+              {jobs.length > 0
+                ? jobs.map((j, i) => <option key={j._id || i}>{j.title}</option>)
+                : (
+                  <>
+                    <option>Senior Property Consultant</option>
+                    <option>Junior Real Estate Agent</option>
+                    <option>Investment Advisory Specialist</option>
+                    <option>Digital Marketing Manager</option>
+                    <option>Property Manager</option>
+                  </>
+                )
+              }
             </select>
             <input
               className="dark-input"
@@ -332,14 +342,18 @@ function JobRow({ job, onApply, delay }) {
       }}
     >
       <div>
-        <div style={{ fontSize: 'clamp(8px,1vw,9px)', letterSpacing: '3px', textTransform: 'uppercase', color: '#2E8B84', marginBottom: '6px' }}>
-          {job.dept}
-        </div>
+        {job.department && (
+          <div style={{ fontSize: 'clamp(8px,1vw,9px)', letterSpacing: '3px', textTransform: 'uppercase', color: '#2E8B84', marginBottom: '6px' }}>
+            {job.department}
+          </div>
+        )}
         <div style={{ fontFamily: 'var(--font-fraunces)', fontSize: 'clamp(18px,2.2vw,26px)', color: '#0D4F4A', marginBottom: '8px' }}>
           {job.title}
         </div>
         <div style={{ fontSize: 'clamp(11px,1.2vw,13px)', color: '#666' }}>
-          📍 Dubai &nbsp;|&nbsp; 💼 Full-time &nbsp;|&nbsp; 💰 {job.pay}
+          {job.location && <>📍 {job.location}</>}
+          {job.type && <>&nbsp;|&nbsp; 💼 {job.type}</>}
+          {job.salary && <>&nbsp;|&nbsp; 💰 {job.salary}</>}
         </div>
       </div>
       <div

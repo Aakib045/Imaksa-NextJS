@@ -244,6 +244,7 @@ export default function AdminPage() {
   const [allTeam, setAllTeam] = useState([])
   const [allEnquiries, setAllEnquiries] = useState([])
   const [allSellRequests, setAllSellRequests] = useState([])
+  const [allJobs, setAllJobs] = useState([])
   const [settingsForm, setSettingsForm] = useState({})
 
   const [pSearch, setPSearch] = useState('')
@@ -259,11 +260,16 @@ export default function AdminPage() {
   const [teamModal, setTeamModal] = useState({ open: false, mode: 'add', data: {} })
   const [enqModal, setEnqModal] = useState({ open: false, data: {} })
   const [sellModal, setSellModal] = useState({ open: false, data: {} })
+  const [jobModal, setJobModal] = useState({ open: false, mode: 'add', data: {} })
 
   const [propertyImages, setPropertyImages] = useState([])
   const [showUrlInput, setShowUrlInput] = useState(false)
   const [urlInputVal, setUrlInputVal] = useState('')
   const fileInputRef = useRef(null)
+  const teamFileInputRef = useRef(null)
+  const [teamPhoto, setTeamPhoto] = useState(null)
+  const [teamPhotoShowUrl, setTeamPhotoShowUrl] = useState(false)
+  const [teamPhotoUrlVal, setTeamPhotoUrlVal] = useState('')
 
   const [loginUser, setLoginUser] = useState('')
   const [loginPass, setLoginPass] = useState('')
@@ -295,13 +301,14 @@ export default function AdminPage() {
     const useTok = tok || token || (typeof window !== 'undefined' ? localStorage.getItem('imaksa_jwt') : '') || ''
     const authH = { 'Content-Type': 'application/json', 'Authorization': `Bearer ${useTok}` }
     try {
-      const [pR, bR, tR, eR, sR, stR] = await Promise.all([
+      const [pR, bR, tR, eR, sR, stR, jR] = await Promise.all([
         fetch('/api/properties?admin=true', { headers: authH }).then(r => r.json()),
         fetch('/api/blogs?admin=true', { headers: authH }).then(r => r.json()),
         fetch('/api/team', { headers: authH }).then(r => r.json()),
         fetch('/api/enquiries', { headers: authH }).then(r => r.json()),
         fetch('/api/sellrequests', { headers: authH }).then(r => r.json()),
         fetch('/api/settings', { headers: authH }).then(r => r.json()),
+        fetch('/api/jobs?admin=true', { headers: authH }).then(r => r.json()),
       ])
       if (pR.success) setAllProps(pR.properties || [])
       if (bR.success) setAllBlogs(bR.blogs || [])
@@ -309,6 +316,7 @@ export default function AdminPage() {
       if (eR.success) setAllEnquiries(eR.enquiries || [])
       if (sR.success) setAllSellRequests(sR.sellRequests || [])
       if (stR.success) setSettingsForm(stR.settings || {})
+      if (jR.success) setAllJobs(jR.jobs || [])
     } catch {
       showToast('Failed to load data', '')
     }
@@ -386,6 +394,7 @@ export default function AdminPage() {
     setAllTeam([])
     setAllEnquiries([])
     setAllSellRequests([])
+    setAllJobs([])
   }
 
   const unreadEnq = allEnquiries.filter(e => !e.read).length
@@ -477,11 +486,17 @@ export default function AdminPage() {
   }
 
   // ── Team handlers ────────────────────────────────────────────────────────────
+  const openTeamModal = (mode, data = {}) => {
+    setTeamPhoto(data.photo ? { src: data.photo, type: 'url' } : null)
+    setTeamPhotoShowUrl(false)
+    setTeamPhotoUrlVal('')
+    setTeamModal({ open: true, mode, data: { ...data } })
+  }
   const setTeamData = (key, val) => setTeamModal(m => ({ ...m, data: { ...m.data, [key]: val } }))
   const saveTeam = async () => {
     const d = teamModal.data
     if (!d.name || !d.role) { showToast('Name and Role are required', ''); return }
-    const body = { name: d.name, role: d.role, email: d.email || '', phone: d.phone || '', bio: d.bio || '', photo: d.photo || '' }
+    const body = { name: d.name, role: d.role, email: d.email || '', phone: d.phone || '', bio: d.bio || '', photo: teamPhoto?.src || '' }
     const res = teamModal.mode === 'edit' && d._id
       ? await apiCall(`/api/team/${d._id}`, 'PUT', body, true)
       : await apiCall('/api/team', 'POST', body, true)
@@ -495,6 +510,28 @@ export default function AdminPage() {
     if (!confirm('Delete this team member?')) return
     const res = await apiCall(`/api/team/${id}`, 'DELETE', null, true)
     if (res.success) { showToast('Member deleted'); loadAllData() }
+    else showToast(res.error || 'Failed', '')
+  }
+
+  // ── Job handlers ─────────────────────────────────────────────────────────────
+  const setJobData = (key, val) => setJobModal(m => ({ ...m, data: { ...m.data, [key]: val } }))
+  const saveJob = async () => {
+    const d = jobModal.data
+    if (!d.title) { showToast('Job title is required', ''); return }
+    const body = { title: d.title, department: d.department || '', type: d.type || 'Full-time', location: d.location || 'Dubai, UAE', salary: d.salary || '', description: d.description || '', active: d.active !== false }
+    const res = jobModal.mode === 'edit' && d._id
+      ? await apiCall(`/api/jobs/${d._id}`, 'PUT', body, true)
+      : await apiCall('/api/jobs', 'POST', body, true)
+    if (res.success) {
+      setJobModal({ open: false, mode: 'add', data: {} })
+      showToast(jobModal.mode === 'edit' ? 'Job updated' : 'Job added')
+      loadAllData()
+    } else showToast(res.error || 'Failed', '')
+  }
+  const deleteJob = async (id) => {
+    if (!confirm('Delete this job listing?')) return
+    const res = await apiCall(`/api/jobs/${id}`, 'DELETE', null, true)
+    if (res.success) { showToast('Job deleted'); loadAllData() }
     else showToast(res.error || 'Failed', '')
   }
 
@@ -573,6 +610,22 @@ export default function AdminPage() {
   }
   const removeImage = (idx) => setPropertyImages(prev => prev.filter((_, i) => i !== idx))
 
+  // ── Team photo handlers ──────────────────────────────────────────────────────
+  const handleTeamPhotoUpload = (e) => {
+    const file = e.target.files[0]
+    if (!file) return
+    const reader = new FileReader()
+    reader.onload = ev => setTeamPhoto({ src: ev.target.result, type: 'upload' })
+    reader.readAsDataURL(file)
+    e.target.value = ''
+  }
+  const addTeamPhotoUrl = () => {
+    if (!teamPhotoUrlVal.trim()) return
+    setTeamPhoto({ src: teamPhotoUrlVal.trim(), type: 'url' })
+    setTeamPhotoUrlVal('')
+    setTeamPhotoShowUrl(false)
+  }
+
   // ── Filtered data ────────────────────────────────────────────────────────────
   const filteredProps = allProps.filter(p => {
     const s = pSearch.toLowerCase()
@@ -601,7 +654,7 @@ export default function AdminPage() {
 
   const pageTitles = {
     dashboard: 'Dashboard', properties: 'Properties', blogs: 'Blog Posts',
-    team: 'Team Members', enquiries: 'Enquiries', sell: 'Sell Requests',
+    team: 'Team Members', jobs: 'Job Listings', enquiries: 'Enquiries', sell: 'Sell Requests',
     settings: 'Site Settings', password: 'Change Password',
   }
 
@@ -701,6 +754,7 @@ export default function AdminPage() {
       { id: 'properties', icon: '🏡', label: 'Properties' },
       { id: 'blogs', icon: '📝', label: 'Blog Posts' },
       { id: 'team', icon: '👥', label: 'Team Members' },
+      { id: 'jobs', icon: '💼', label: 'Jobs' },
     ]},
     { section: 'CRM', items: [
       { id: 'enquiries', icon: '📩', label: 'Enquiries', badge: unreadEnq },
@@ -712,11 +766,12 @@ export default function AdminPage() {
     ]},
   ]
 
-  const showAddBtn = ['properties', 'blogs', 'team'].includes(currentPage)
+  const showAddBtn = ['properties', 'blogs', 'team', 'jobs'].includes(currentPage)
   const handleAddNew = () => {
     if (currentPage === 'properties') openPropModal('add')
     else if (currentPage === 'blogs') setBlogModal({ open: true, mode: 'add', data: {} })
-    else if (currentPage === 'team') setTeamModal({ open: true, mode: 'add', data: {} })
+    else if (currentPage === 'team') openTeamModal('add')
+    else if (currentPage === 'jobs') setJobModal({ open: true, mode: 'add', data: {} })
   }
 
   return (
@@ -795,7 +850,8 @@ export default function AdminPage() {
             : currentPage === 'dashboard' ? <PageDashboard allProps={allProps} allBlogs={allBlogs} allTeam={allTeam} allEnquiries={allEnquiries} unreadEnq={unreadEnq} unreadSell={unreadSell} fmtDate={fmtDate} navigate={navigate} />
             : currentPage === 'properties' ? <PageProperties filteredProps={filteredProps} pSearch={pSearch} setPSearch={setPSearch} pType={pType} setPType={setPType} pListing={pListing} setPListing={setPListing} pStatus={pStatus} setPStatus={setPStatus} openPropModal={openPropModal} deleteProp={deleteProp} fmtPrice={fmtPrice} />
             : currentPage === 'blogs' ? <PageBlogs filteredBlogs={filteredBlogs} bSearch={bSearch} setBSearch={setBSearch} setBlogModal={setBlogModal} deleteBlog={deleteBlog} fmtDate={fmtDate} />
-            : currentPage === 'team' ? <PageTeam allTeam={allTeam} setTeamModal={setTeamModal} deleteTeam={deleteTeam} />
+            : currentPage === 'team' ? <PageTeam allTeam={allTeam} openTeamModal={openTeamModal} deleteTeam={deleteTeam} />
+            : currentPage === 'jobs' ? <PageJobs allJobs={allJobs} setJobModal={setJobModal} deleteJob={deleteJob} />
             : currentPage === 'enquiries' ? <PageEnquiries filteredEnq={filteredEnq} enqFilter={enqFilter} setEnqFilter={setEnqFilter} unreadEnq={unreadEnq} markAllEnqRead={markAllEnqRead} updateEnqStatus={updateEnqStatus} deleteEnq={deleteEnq} setEnqModal={setEnqModal} enqStatusLabel={enqStatusLabel} fmtDate={fmtDate} />
             : currentPage === 'sell' ? <PageSell filteredSell={filteredSell} sellFilter={sellFilter} setSellFilter={setSellFilter} unreadSell={unreadSell} markAllSellRead={markAllSellRead} toggleSellContacted={toggleSellContacted} deleteSell={deleteSell} setSellModal={setSellModal} fmtDate={fmtDate} />
             : currentPage === 'settings' ? <PageSettings settingsForm={settingsForm} setSF={setSF} />
@@ -816,13 +872,19 @@ export default function AdminPage() {
         <BlogModal blogModal={blogModal} setBlogModal={setBlogModal} setBlogData={setBlogData} saveBlog={saveBlog} />
       )}
       {teamModal.open && (
-        <TeamModal teamModal={teamModal} setTeamModal={setTeamModal} setTeamData={setTeamData} saveTeam={saveTeam} />
+        <TeamModal teamModal={teamModal} setTeamModal={setTeamModal} setTeamData={setTeamData} saveTeam={saveTeam}
+          teamPhoto={teamPhoto} setTeamPhoto={setTeamPhoto} teamPhotoShowUrl={teamPhotoShowUrl} setTeamPhotoShowUrl={setTeamPhotoShowUrl}
+          teamPhotoUrlVal={teamPhotoUrlVal} setTeamPhotoUrlVal={setTeamPhotoUrlVal} teamFileInputRef={teamFileInputRef}
+          handleTeamPhotoUpload={handleTeamPhotoUpload} addTeamPhotoUrl={addTeamPhotoUrl} />
       )}
       {enqModal.open && (
         <EnqModal enqModal={enqModal} setEnqModal={setEnqModal} fmtDate={fmtDate} />
       )}
       {sellModal.open && (
         <SellModal sellModal={sellModal} setSellModal={setSellModal} fmtDate={fmtDate} />
+      )}
+      {jobModal.open && (
+        <JobModal jobModal={jobModal} setJobModal={setJobModal} setJobData={setJobData} saveJob={saveJob} />
       )}
 
       {/* Toast */}
@@ -1053,7 +1115,7 @@ function PageBlogs({ filteredBlogs, bSearch, setBSearch, setBlogModal, deleteBlo
   )
 }
 
-function PageTeam({ allTeam, setTeamModal, deleteTeam }) {
+function PageTeam({ allTeam, openTeamModal, deleteTeam }) {
   return (
     <>
       <div className="sec-hdr">
@@ -1092,7 +1154,7 @@ function PageTeam({ allTeam, setTeamModal, deleteTeam }) {
                 <td style={{fontSize:12}}>{m.phone || '—'}</td>
                 <td>
                   <div className="tbl-actions">
-                    <button className="btn btn-outline btn-sm" onClick={() => setTeamModal({ open: true, mode: 'edit', data: { ...m } })}>✏️ Edit</button>
+                    <button className="btn btn-outline btn-sm" onClick={() => openTeamModal('edit', m)}>✏️ Edit</button>
                     <button className="btn btn-danger btn-sm" onClick={() => deleteTeam(m._id)}>🗑️</button>
                   </div>
                 </td>
@@ -1428,7 +1490,7 @@ function BlogModal({ blogModal, setBlogModal, setBlogData, saveBlog }) {
   )
 }
 
-function TeamModal({ teamModal, setTeamModal, setTeamData, saveTeam }) {
+function TeamModal({ teamModal, setTeamModal, setTeamData, saveTeam, teamPhoto, setTeamPhoto, teamPhotoShowUrl, setTeamPhotoShowUrl, teamPhotoUrlVal, setTeamPhotoUrlVal, teamFileInputRef, handleTeamPhotoUpload, addTeamPhotoUrl }) {
   const d = teamModal.data
   const close = () => setTeamModal(m => ({ ...m, open: false }))
   return (
@@ -1448,7 +1510,30 @@ function TeamModal({ teamModal, setTeamModal, setTeamData, saveTeam }) {
             <div className="fg"><label className="fl">Phone</label><input className="fi" type="text" value={d.phone || ''} onChange={e => setTeamData('phone', e.target.value)} placeholder="+971 50 000 0000" /></div>
           </div>
           <div className="fg"><label className="fl">Short Bio</label><textarea className="fi" value={d.bio || ''} onChange={e => setTeamData('bio', e.target.value)} placeholder="Brief professional bio..." /></div>
-          <div className="fg"><label className="fl">Photo URL</label><input className="fi" type="url" value={d.photo || ''} onChange={e => setTeamData('photo', e.target.value)} placeholder="https://example.com/photo.jpg" /></div>
+          <label className="fl" style={{marginBottom:8}}>Photo</label>
+          <div className="img-upload-box">
+            <div className="img-upload-actions">
+              <button className="img-upload-btn" onClick={() => teamFileInputRef.current?.click()}>📁 Upload Photo</button>
+              <input ref={teamFileInputRef} type="file" accept="image/*" style={{display:'none'}} onChange={handleTeamPhotoUpload} />
+              <button className="btn-outline" style={{flex:1,padding:10,border:'1px solid var(--border2)',fontSize:11,letterSpacing:1,cursor:'pointer',background:'transparent',color:'var(--teal)',fontFamily:'Inter,sans-serif'}} onClick={() => setTeamPhotoShowUrl(v => !v)}>🔗 Add URL</button>
+            </div>
+            {teamPhotoShowUrl && (
+              <div className="img-url-row">
+                <input type="url" value={teamPhotoUrlVal} onChange={e => setTeamPhotoUrlVal(e.target.value)} placeholder="https://example.com/photo.jpg" onKeyDown={e => e.key === 'Enter' && addTeamPhotoUrl()} />
+                <button onClick={addTeamPhotoUrl}>Add</button>
+                <button onClick={() => { setTeamPhotoShowUrl(false); setTeamPhotoUrlVal('') }} style={{background:'var(--cream2)',color:'var(--text2)'}}>✕</button>
+              </div>
+            )}
+            {teamPhoto && (
+              <div style={{display:'flex',alignItems:'center',gap:10,marginTop:8}}>
+                <div className="img-thumb-wrap" style={{width:80,height:80}}>
+                  <img src={teamPhoto.src} alt="" onError={e => { e.target.style.display = 'none' }} style={{width:'100%',height:'100%',objectFit:'cover',border:'1px solid var(--border)',borderRadius:'50%'}} />
+                  <button className="img-remove" onClick={() => setTeamPhoto(null)}>✕</button>
+                </div>
+                <span style={{fontSize:11,color:'var(--text3)'}}>Photo preview</span>
+              </div>
+            )}
+          </div>
         </div>
         <div className="modal-ftr">
           <button className="btn btn-outline" onClick={close}>Cancel</button>
@@ -1515,6 +1600,117 @@ function SellModal({ sellModal, setSellModal, fmtDate }) {
         <div className="modal-ftr">
           <button className="btn btn-outline" onClick={close}>Close</button>
           {s.email && <a href={`mailto:${s.email}?subject=Re: Your Property Listing Request`} className="btn btn-primary">✉️ Reply via Email</a>}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function PageJobs({ allJobs, setJobModal, deleteJob }) {
+  return (
+    <>
+      <div className="sec-hdr">
+        <div>
+          <div className="sec-title">Job Listings</div>
+          <div className="sec-sub">Manage open positions on your careers page</div>
+        </div>
+      </div>
+      <div className="tbl-wrap">
+        <table className="tbl">
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Department</th>
+              <th>Type</th>
+              <th>Location</th>
+              <th>Salary</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {allJobs.length === 0 && (
+              <tr><td colSpan="7"><div className="empty"><div className="empty-icon">💼</div><div className="empty-title">No job listings yet</div></div></td></tr>
+            )}
+            {allJobs.map(j => (
+              <tr key={j._id}>
+                <td><div className="tbl-name">{j.title}</div></td>
+                <td>
+                  {j.department
+                    ? <span className="bdg bdg-buy">{j.department}</span>
+                    : <span style={{color:'var(--text3)'}}>—</span>
+                  }
+                </td>
+                <td style={{fontSize:12}}>{j.type || '—'}</td>
+                <td style={{fontSize:12,color:'var(--text3)'}}>{j.location || '—'}</td>
+                <td style={{fontSize:12}}>{j.salary || '—'}</td>
+                <td>
+                  <span className={`bdg ${j.active ? 'bdg-published' : 'bdg-draft'}`}>
+                    {j.active ? 'Active' : 'Draft'}
+                  </span>
+                </td>
+                <td>
+                  <div className="tbl-actions">
+                    <button className="btn btn-outline btn-sm" onClick={() => setJobModal({ open: true, mode: 'edit', data: { ...j } })}>✏️ Edit</button>
+                    <button className="btn btn-danger btn-sm" onClick={() => deleteJob(j._id)}>🗑️</button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </>
+  )
+}
+
+function JobModal({ jobModal, setJobModal, setJobData, saveJob }) {
+  const d = jobModal.data
+  const close = () => setJobModal(m => ({ ...m, open: false }))
+  return (
+    <div className="modal-ov open" onClick={e => e.target === e.currentTarget && close()}>
+      <div className="modal modal-sm">
+        <div className="modal-hdr">
+          <div className="modal-title">{jobModal.mode === 'edit' ? 'Edit Job' : 'Add Job Listing'}</div>
+          <button className="modal-close" onClick={close}>×</button>
+        </div>
+        <div className="modal-body">
+          <div className="fg"><label className="fl">Job Title *</label><input className="fi" type="text" value={d.title || ''} onChange={e => setJobData('title', e.target.value)} placeholder="e.g. Senior Property Consultant" /></div>
+          <div className="fr">
+            <div className="fg">
+              <label className="fl">Department</label>
+              <select className="fi" value={d.department || ''} onChange={e => setJobData('department', e.target.value)}>
+                <option value="">Select Department</option>
+                <option>Sales</option>
+                <option>Investment</option>
+                <option>Marketing</option>
+                <option>Operations</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div className="fg">
+              <label className="fl">Type</label>
+              <select className="fi" value={d.type || 'Full-time'} onChange={e => setJobData('type', e.target.value)}>
+                <option>Full-time</option>
+                <option>Part-time</option>
+                <option>Contract</option>
+              </select>
+            </div>
+          </div>
+          <div className="fg"><label className="fl">Location</label><input className="fi" type="text" value={d.location || 'Dubai, UAE'} onChange={e => setJobData('location', e.target.value)} placeholder="e.g. Dubai, UAE" /></div>
+          <div className="fg"><label className="fl">Salary / Package</label><input className="fi" type="text" value={d.salary || ''} onChange={e => setJobData('salary', e.target.value)} placeholder="e.g. Commission + Base, Competitive Package" /></div>
+          <div className="fg"><label className="fl">Description</label><textarea className="fi" value={d.description || ''} onChange={e => setJobData('description', e.target.value)} placeholder="Job description and requirements..." /></div>
+          <div className="fg">
+            <label className="fl">Status</label>
+            <select className="fi" value={d.active === false ? 'draft' : 'active'} onChange={e => setJobData('active', e.target.value === 'active')}>
+              <option value="active">Active</option>
+              <option value="draft">Draft</option>
+            </select>
+          </div>
+        </div>
+        <div className="modal-ftr">
+          <button className="btn btn-outline" onClick={close}>Cancel</button>
+          <button className="btn btn-primary" onClick={saveJob}>💾 {jobModal.mode === 'edit' ? 'Update Job' : 'Add Job'}</button>
         </div>
       </div>
     </div>
