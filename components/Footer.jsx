@@ -68,9 +68,6 @@ export default function Footer() {
 
   const phone = settings.phone || ''
   const email = settings.email || ''
-  const addr = settings.co && settings.addr
-    ? `${settings.co}, ${settings.addr}`
-    : settings.addr || ''
 
   return (
     <footer className="bg-gradient-to-b from-[#0D4F4A] to-[#082E2B] border-t-2 border-[#C9A84C]">
@@ -145,7 +142,10 @@ export default function Footer() {
             <h3 className="text-[#C9A84C] text-xs font-semibold uppercase tracking-widest" style={{ marginBottom: '12px' }}>Contact</h3>
             <ul className="space-y-2">
               <li>
-                <span className="text-[#F5EFE4]/70 text-sm">{addr}</span>
+                <div>
+                  <div style={{fontWeight:600, color:'#F5EFE4', fontSize:13, marginBottom:3}}>{settings.co || 'IMAKSA Real Estate LLC'}</div>
+                  <div className="text-[#F5EFE4]/70 text-sm">{settings.addr}</div>
+                </div>
               </li>
               <li>
                 <a href={`tel:${phone}`} className="text-[#F5EFE4]/70 text-sm hover:text-[#C9A84C] transition-colors duration-200">

@@ -938,6 +938,12 @@ export default function Home() {
             </p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
               {[
+                { icon: '📍', label: 'Address', value: (
+                  <>
+                    <div style={{fontWeight:600, color:'#F5EFE4', fontSize:13, marginBottom:2}}>{settings.co || 'IMAKSA Real Estate LLC'}</div>
+                    <div style={{color:'rgba(245,239,228,.8)'}}>{settings.addr}</div>
+                  </>
+                ) },
                 { icon: '📞', label: 'Call Us', value: settings.phone || '' },
                 { icon: '💬', label: 'WhatsApp', value: settings.wa || settings.whatsapp || '' },
                 { icon: '✉️', label: 'Email', value: settings.email || '' },

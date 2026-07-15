@@ -113,13 +113,19 @@ function ContactPageContent() {
   const addr = settings.co && settings.addr
     ? `${settings.co}, ${settings.addr}`
     : settings.addr || ''
+  const addrDisplay = (
+    <>
+      <span style={{fontWeight:600, display:'block', marginBottom:4}}>{settings.co || 'IMAKSA Real Estate LLC'}</span>
+      <span style={{color:'rgba(245,239,228,.8)'}}>{settings.addr}</span>
+    </>
+  )
   const phoneVal = settings.phone || ''
   const emailVal = settings.email || ''
   const hrs = settings.hrs || ''
   const mapsUrl = settings.maps || DEFAULT_MAPS
 
   const contactItems = [
-    { icon: '📍', label: 'OFFICE ADDRESS', value: addr },
+    { icon: '📍', label: 'OFFICE ADDRESS', value: addrDisplay },
     {
       icon: '📞',
       label: 'PHONE',
@@ -497,14 +503,10 @@ function ContactPageContent() {
             }}>
               {`We're located in the heart of Business Village, Dubai — easily accessible from Downtown and the Metro.`}
             </p>
-            <p style={{
-              fontSize: 'clamp(13px,1.3vw,15px)',
-              color: '#3A3A3A',
-              lineHeight: 1.85,
-              margin: '0 0 0',
-            }}>
-              {addr}
-            </p>
+            <div style={{ fontSize: 'clamp(13px,1.3vw,15px)', lineHeight: 1.85, margin: '0 0 0' }}>
+              <div style={{fontWeight:600, color:'#0D4F4A', fontSize:14, marginBottom:4}}>{settings.co || 'IMAKSA Real Estate LLC'}</div>
+              <div style={{color:'#3A3A3A'}}>{settings.addr}</div>
+            </div>
             <a
               href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(addr)}`}
               target="_blank"

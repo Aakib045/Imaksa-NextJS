@@ -5,6 +5,7 @@ import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import Cursor from "@/components/Cursor";
 import { SpeedInsights } from '@vercel/speed-insights/next';
+import { GoogleAnalytics } from '@next/third-parties/google';
 
 const inter = Inter({
   variable: "--font-inter",
@@ -55,6 +56,9 @@ export const metadata = {
       'max-snippet': -1,
     },
   },
+  verification: {
+    google: 'GOOGLE_VERIFICATION_CODE',
+  },
 };
 
 export const viewport = {
@@ -67,13 +71,13 @@ export default function RootLayout({ children }) {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'RealEstateAgent',
-    name: 'IMAKSA Properties LLC',
+    name: 'IMAKSA Real Estate LLC',
     description: "Dubai's trusted real estate partner specializing in luxury properties, off-plan investments and property management.",
     url: 'https://imaksa.ae',
     telephone: '+97142669295',
     address: {
       '@type': 'PostalAddress',
-      streetAddress: 'IMAKSA Real Estate LLC, 203, Block B, Business Village, Port Saeed',
+      streetAddress: 'Suite 701, Churchill Executive Towers, Business Bay',
       addressLocality: 'Dubai',
       addressCountry: 'AE',
     },
@@ -109,6 +113,7 @@ export default function RootLayout({ children }) {
         <WhatsAppButton />
         <SpeedInsights />
       </body>
+      <GoogleAnalytics gaId="G-XXXXXXXXXX" />
     </html>
   );
 }
