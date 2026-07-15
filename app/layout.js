@@ -59,6 +59,11 @@ export const metadata = {
   verification: {
     google: 'GOOGLE_VERIFICATION_CODE',
   },
+  icons: {
+    icon: '/logo-icon.png',
+    shortcut: '/logo-icon.png',
+    apple: '/logo-icon.png',
+  },
 };
 
 export const viewport = {
