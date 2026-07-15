@@ -84,8 +84,6 @@ export default function AboutPage() {
 
   return (
     <div style={{ fontFamily: 'var(--font-inter)' }}>
-      <style>{`@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.5} }`}</style>
-
       {/* HERO */}
       <section style={{
         background: '#0D4F4A',
@@ -237,32 +235,31 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* TEAM */}
-      <section style={{ background: '#FAFAF8', padding: `clamp(48px,6vw,88px) clamp(16px,5vw,72px)` }}>
-        <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
-          <motion.p {...fadeUp} style={{ fontSize: 'clamp(8px,1.3vw,10px)', letterSpacing: '5px', textTransform: 'uppercase', color: '#2E8B84', marginBottom: '16px' }}>
-            The People Behind IMAKSA
-          </motion.p>
-          <motion.h2
-            {...fadeUp}
-            transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
-            style={{ fontFamily: 'var(--font-fraunces)', fontSize: 'clamp(24px,3.5vw,48px)', fontWeight: 300, color: '#0D4F4A', margin: 0 }}
-          >
-            Meet Our <em style={{ fontStyle: 'italic' }}>Team</em>
-          </motion.h2>
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: is480 ? '1fr' : is900 ? 'repeat(2,1fr)' : 'repeat(4,1fr)',
-            gap: 'clamp(16px,2.5vw,28px)',
-            marginTop: 'clamp(36px,5vw,64px)',
-          }}>
-            {loading
-              ? Array.from({ length: 4 }).map((_, i) => <SkeletonCard key={i} />)
-              : members.map((m, i) => <TeamCard key={m._id || i} member={m} />)
-            }
+      {/* TEAM — only rendered when members exist */}
+      {!loading && members.length > 0 && (
+        <section style={{ background: '#FAFAF8', padding: `clamp(48px,6vw,88px) clamp(16px,5vw,72px)` }}>
+          <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
+            <motion.p {...fadeUp} style={{ fontSize: 'clamp(8px,1.3vw,10px)', letterSpacing: '5px', textTransform: 'uppercase', color: '#2E8B84', marginBottom: '16px' }}>
+              The People Behind IMAKSA
+            </motion.p>
+            <motion.h2
+              {...fadeUp}
+              transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
+              style={{ fontFamily: 'var(--font-fraunces)', fontSize: 'clamp(24px,3.5vw,48px)', fontWeight: 300, color: '#0D4F4A', margin: 0 }}
+            >
+              Meet Our <em style={{ fontStyle: 'italic' }}>Team</em>
+            </motion.h2>
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: is480 ? '1fr' : is900 ? 'repeat(2,1fr)' : 'repeat(4,1fr)',
+              gap: 'clamp(16px,2.5vw,28px)',
+              marginTop: 'clamp(36px,5vw,64px)',
+            }}>
+              {members.map((m, i) => <TeamCard key={m._id || i} member={m} />)}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
     </div>
   )
 }
@@ -333,18 +330,5 @@ function TeamCard({ member }) {
         <div style={{ fontSize: 'clamp(13px,1.3vw,15px)', color: '#3A3A3A', lineHeight: 1.85 }}>{member.bio}</div>
       </div>
     </motion.div>
-  )
-}
-
-function SkeletonCard() {
-  return (
-    <div style={{ background: '#fff', overflow: 'hidden' }}>
-      <div style={{ height: 'clamp(240px,26vw,320px)', background: '#E8E8E8', animation: 'pulse 1.5s ease-in-out infinite' }} />
-      <div style={{ padding: 'clamp(16px,2vw,24px)' }}>
-        <div style={{ height: '20px', background: '#E8E8E8', borderRadius: '2px', marginBottom: '8px', width: '70%', animation: 'pulse 1.5s ease-in-out infinite' }} />
-        <div style={{ height: '12px', background: '#E8E8E8', borderRadius: '2px', marginBottom: '8px', width: '50%', animation: 'pulse 1.5s ease-in-out infinite' }} />
-        <div style={{ height: '12px', background: '#E8E8E8', borderRadius: '2px', width: '90%', animation: 'pulse 1.5s ease-in-out infinite' }} />
-      </div>
-    </div>
   )
 }

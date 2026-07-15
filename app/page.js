@@ -48,24 +48,6 @@ const fadeUp = {
 }
 
 // ─── Static data ──────────────────────────────────────────────────────────────
-const REVIEWS = [
-  {
-    text: 'IMAKSA made buying our Palm Jumeirah villa an absolute dream. Their expertise and attention to detail was unmatched. Highly recommend.',
-    name: 'James & Sarah Mitchell',
-    country: 'United Kingdom',
-  },
-  {
-    text: 'As an NRI investor, I was nervous about buying remotely. IMAKSA handled everything professionally and got me an excellent deal in Downtown Dubai.',
-    name: 'Rajesh Kumar',
-    country: 'India',
-  },
-  {
-    text: 'The team helped us find the perfect off-plan apartment. Their knowledge of upcoming developments is exceptional. Already recommended to 3 friends.',
-    name: 'Fatima Al Rashidi',
-    country: 'Saudi Arabia',
-  },
-]
-
 const MARQUEE_ITEMS = [
   'Palm Jumeirah', 'Downtown Dubai', 'Dubai Marina', 'Dubai Hills Estate',
   'Business Bay', 'DIFC', 'Emirates Hills', 'Jumeirah Bay Island', 'JVC', 'Dubai Creek Harbour',
@@ -372,7 +354,6 @@ export default function Home() {
           .stats-grid    { grid-template-columns: 1fr 1fr !important; }
           .about-grid    { grid-template-columns: 1fr !important; }
           .services-grid { grid-template-columns: repeat(2,1fr) !important; }
-          .reviews-grid  { grid-template-columns: repeat(2,1fr) !important; }
           .cta-grid      { grid-template-columns: 1fr !important; }
           .cta-left      { min-height: 280px !important; }
           .about-badge   { right: 0 !important; bottom: -16px !important; }
@@ -382,7 +363,6 @@ export default function Home() {
         @media (max-width:480px) {
           .props-grid    { grid-template-columns: 1fr !important; }
           .services-grid { grid-template-columns: 1fr !important; }
-          .reviews-grid  { grid-template-columns: 1fr !important; }
         }
         .srv {
           background: #F5EFE4;
@@ -921,54 +901,7 @@ export default function Home() {
       </section>
 
       {/* ══════════════════════════════════════════════════════════
-          7. REVIEWS
-      ══════════════════════════════════════════════════════════ */}
-      <section style={{ background: '#fff', padding: 'clamp(40px,5.5vw,80px) clamp(16px,5vw,80px)' }}>
-        <motion.div
-          initial="hidden" whileInView="visible"
-          viewport={{ once: true, amount: 0.2 }}
-          variants={fadeUp} custom={0}
-          style={{ textAlign: 'center', marginBottom: 'clamp(32px,5vw,60px)' }}
-        >
-          <div style={{ fontSize: 9, letterSpacing: '3px', textTransform: 'uppercase', color: '#8B6E47', marginBottom: 12 }}>
-            Client Testimonials
-          </div>
-          <h2 style={{
-            fontFamily: 'var(--font-fraunces)',
-            fontSize: 'clamp(24px,3.2vw,44px)',
-            fontWeight: 300, color: '#0D4F4A', margin: 0,
-          }}>
-            What Our <em style={{ color: '#8B6E47' }}>Clients</em> Say
-          </h2>
-        </motion.div>
-
-        <div className="reviews-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 2 }}>
-          {REVIEWS.map((r, i) => (
-            <motion.div
-              key={i}
-              initial="hidden" whileInView="visible"
-              viewport={{ once: true, amount: 0.1 }}
-              variants={fadeUp} custom={i * 0.1}
-              style={{ background: '#F5EFE4', padding: 'clamp(22px,3vw,36px)' }}
-            >
-              <div style={{ fontSize: 13, letterSpacing: '2px', color: '#D4B896', marginBottom: 16 }}>★★★★★</div>
-              <p style={{
-                fontStyle: 'italic', color: '#3A3A3A',
-                lineHeight: 1.75, fontSize: 'clamp(13px,1.1vw,14px)', marginBottom: 20,
-              }}>
-                &ldquo;{r.text}&rdquo;
-              </p>
-              <div style={{ fontSize: 10, letterSpacing: '2px', textTransform: 'uppercase', color: '#0D4F4A', marginBottom: 4 }}>
-                {r.name}
-              </div>
-              <div style={{ fontSize: 10, color: '#9B9B8A' }}>{r.country}</div>
-            </motion.div>
-          ))}
-        </div>
-      </section>
-
-      {/* ══════════════════════════════════════════════════════════
-          8. CTA + CONTACT FORM
+          7. CTA + CONTACT FORM
       ══════════════════════════════════════════════════════════ */}
       <section className="cta-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', minHeight: 560 }}>
         {/* Left dark panel */}
@@ -1117,7 +1050,7 @@ export default function Home() {
       </section>
 
       {/* ══════════════════════════════════════════════════════════
-          9. SUBSCRIBE POPUP
+          8. SUBSCRIBE POPUP
       ══════════════════════════════════════════════════════════ */}
       {showPopup && (
         <>
