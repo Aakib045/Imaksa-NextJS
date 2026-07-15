@@ -55,8 +55,8 @@ export default function CareersPage() {
   const [selectedJob, setSelectedJob] = useState('')
   const [experience, setExperience] = useState('')
   const [message, setMessage] = useState('')
-  const [submitted, setSubmitted] = useState(false)
-  const [submitting, setSubmitting] = useState(false)
+  const [btnState, setBtnState] = useState('idle')
+  const [showSuccess, setShowSuccess] = useState(false)
   const [settings, setSettings] = useState({})
   const [jobs, setJobs] = useState([])
   const { is480, is768 } = useBreakpoints()
@@ -76,10 +76,10 @@ export default function CareersPage() {
     document.getElementById('apply')?.scrollIntoView({ behavior: 'smooth' })
 
   async function handleSubmit() {
-    if (submitting || submitted) return
-    setSubmitting(true)
+    if (btnState === 'loading') return
+    setBtnState('loading')
     try {
-      await fetch('/api/enquiries', {
+      const res = await fetch('/api/enquiries', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -91,9 +91,27 @@ export default function CareersPage() {
           source: 'careers',
         }),
       })
-      setSubmitted(true)
-    } catch (_) {}
-    setSubmitting(false)
+      const data = await res.json()
+      if (data.success) {
+        setBtnState('success')
+        setShowSuccess(true)
+        setName('')
+        setEmail('')
+        setPhone('')
+        setSelectedJob('')
+        setExperience('')
+        setMessage('')
+        setTimeout(() => {
+          setBtnState('idle')
+          setShowSuccess(false)
+        }, 5000)
+      } else {
+        throw new Error()
+      }
+    } catch {
+      setBtnState('error')
+      setTimeout(() => setBtnState('idle'), 3000)
+    }
   }
 
   return (
@@ -257,26 +275,38 @@ export default function CareersPage() {
               rows={5}
               style={{ ...darkInput, resize: 'vertical' }}
             />
+            {showSuccess && (
+              <div style={{
+                background: '#d1fae5',
+                border: '1px solid #6ee7b7',
+                color: '#065f46',
+                padding: '14px 18px',
+                fontSize: 'clamp(12px,1.3vw,14px)',
+                marginBottom: '12px',
+              }}>
+                ✅ Thank you! Our HR team will review your application and get back to you within 48 hours.
+              </div>
+            )}
             <div
-              onClick={handleSubmit}
+              onClick={btnState === 'loading' ? undefined : handleSubmit}
               style={{
                 width: '100%',
-                background: submitted ? '#27ae60' : '#F5EFE4',
-                color: submitted ? '#fff' : '#0D4F4A',
+                background: btnState === 'success' ? '#0D9B6E' : '#F5EFE4',
+                color: btnState === 'success' ? '#fff' : '#0D4F4A',
                 padding: 'clamp(14px,2vw,18px)',
                 textAlign: 'center',
                 fontFamily: 'var(--font-inter)',
                 fontSize: 'clamp(10px,1.2vw,12px)',
                 letterSpacing: '3px',
                 textTransform: 'uppercase',
-                cursor: submitted || submitting ? 'default' : 'pointer',
+                cursor: btnState === 'loading' ? 'wait' : 'pointer',
                 fontWeight: 700,
                 boxSizing: 'border-box',
-                transition: 'all .3s',
+                transition: 'background .2s',
                 userSelect: 'none',
               }}
             >
-              {submitted ? 'Application Sent! ✅' : submitting ? 'Sending…' : 'Submit Application'}
+              {btnState === 'loading' ? 'Sending...' : btnState === 'success' ? '✅ Application Submitted!' : btnState === 'error' ? 'Try Again' : 'Submit Application'}
             </div>
           </motion.div>
         </div>
