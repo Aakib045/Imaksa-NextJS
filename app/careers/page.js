@@ -52,7 +52,7 @@ export default function CareersPage() {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
-  const [position, setPosition] = useState('Senior Property Consultant')
+  const [selectedJob, setSelectedJob] = useState('')
   const [experience, setExperience] = useState('')
   const [message, setMessage] = useState('')
   const [submitted, setSubmitted] = useState(false)
@@ -86,7 +86,7 @@ export default function CareersPage() {
           name,
           email,
           phone,
-          interest: `Career Application - ${position}`,
+          interest: `Career Application - ${selectedJob}`,
           message: `Years of Experience: ${experience}\n\n${message}`,
           source: 'careers',
         }),
@@ -178,7 +178,10 @@ export default function CareersPage() {
               <div style={{ fontSize: 'clamp(13px,1.3vw,15px)' }}>Check back soon!</div>
             </motion.div>
           ) : jobs.map((job, i) => (
-            <JobRow key={job._id || i} job={job} onApply={scrollToApply} delay={i * 0.08} />
+            <JobRow key={job._id || i} job={job} onApply={(title) => {
+              setSelectedJob(title)
+              document.getElementById('apply')?.scrollIntoView({ behavior: 'smooth' })
+            }} delay={i * 0.08} />
           ))}
         </div>
       </section>
@@ -232,22 +235,12 @@ export default function CareersPage() {
             />
             <select
               className="dark-input"
-              value={position}
-              onChange={e => setPosition(e.target.value)}
+              value={selectedJob}
+              onChange={e => setSelectedJob(e.target.value)}
               style={{ ...darkInput, appearance: 'none', WebkitAppearance: 'none', cursor: 'pointer' }}
             >
-              {jobs.length > 0
-                ? jobs.map((j, i) => <option key={j._id || i}>{j.title}</option>)
-                : (
-                  <>
-                    <option>Senior Property Consultant</option>
-                    <option>Junior Real Estate Agent</option>
-                    <option>Investment Advisory Specialist</option>
-                    <option>Digital Marketing Manager</option>
-                    <option>Property Manager</option>
-                  </>
-                )
-              }
+              <option value="">Select Position</option>
+              {jobs.map((j, i) => <option key={j._id || i} value={j.title}>{j.title}</option>)}
             </select>
             <input
               className="dark-input"
@@ -357,7 +350,7 @@ function JobRow({ job, onApply, delay }) {
         </div>
       </div>
       <div
-        onClick={onApply}
+        onClick={() => onApply(job.title)}
         style={{
           background: '#0D4F4A',
           color: '#F5EFE4',

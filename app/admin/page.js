@@ -342,15 +342,6 @@ export default function AdminPage() {
   }, [])
 
   useEffect(() => {
-    const stored = typeof window !== 'undefined' ? localStorage.getItem('imaksa_jwt') : null
-    if (stored) {
-      setToken(stored)
-      setIsLoggedIn(true)
-      loadAllData(stored)
-    }
-  }, []) // eslint-disable-line
-
-  useEffect(() => {
     const tick = () => {
       const t = new Date().toLocaleTimeString('en-AE', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Dubai' })
       setClock(`${t} GST`)
