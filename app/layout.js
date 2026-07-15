@@ -22,8 +22,8 @@ export const metadata = {
   description: 'IMAKSA — Dubai\'s trusted real estate partner. Buy, rent, sell, and discover off-plan properties across Palm Jumeirah, Downtown Dubai, Dubai Marina and more.',
   keywords: 'Dubai real estate, buy property Dubai, rent property Dubai, off-plan Dubai, luxury villas Dubai, IMAKSA properties',
   authors: [{ name: 'IMAKSA Properties' }],
-  creator: 'IMAKSA Properties LLC',
-  publisher: 'IMAKSA Properties LLC',
+  creator: 'IMAKSA Real Estate LLC',
+  publisher: 'IMAKSA Real Estate LLC',
   metadataBase: new URL('https://imaksa.ae'),
   openGraph: {
     type: 'website',

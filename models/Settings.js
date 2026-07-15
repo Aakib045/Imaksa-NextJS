@@ -14,7 +14,7 @@ const settingsSchema = new mongoose.Schema({
   li:      { type: String, default: '' },   // LinkedIn
   ig:      { type: String, default: '' },   // Instagram
   fb:      { type: String, default: '' },   // Facebook
-  co:      { type: String, default: 'IMAKSA Properties LLC' },
+  co:      { type: String, default: 'IMAKSA Real Estate LLC' },
   rera:    { type: String, default: '' },
   year:    { type: String, default: '2012' },
 }, { timestamps: true });

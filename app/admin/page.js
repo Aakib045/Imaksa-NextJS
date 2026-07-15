@@ -1295,7 +1295,7 @@ function PageSettings({ settingsForm, setSF }) {
       <div className="s-card">
         <div className="s-card-title">🏢 Company Info</div>
         <div className="s-card-sub">Name, license and founding year</div>
-        <div className="fg"><label className="fl">Company Name</label><input className="fi" type="text" value={settingsForm.co || ''} onChange={e => setSF('co', e.target.value)} placeholder="IMAKSA Properties LLC" /></div>
+        <div className="fg"><label className="fl">Company Name</label><input className="fi" type="text" value={settingsForm.co || ''} onChange={e => setSF('co', e.target.value)} placeholder="IMAKSA Real Estate LLC" /></div>
         <div className="fg"><label className="fl">RERA License No.</label><input className="fi" type="text" value={settingsForm.rera || ''} onChange={e => setSF('rera', e.target.value)} placeholder="RERA-00000" /></div>
         <div className="fg"><label className="fl">Founded Year</label><input className="fi" type="text" value={settingsForm.year || ''} onChange={e => setSF('year', e.target.value)} placeholder="2012" /></div>
       </div>
