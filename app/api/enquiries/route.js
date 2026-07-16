@@ -29,23 +29,48 @@ export async function POST(request) {
         to: process.env.CLIENT_EMAIL,
         subject: meta.subject,
         html: `
-          <div style="font-family:Inter,sans-serif;max-width:600px;margin:0 auto;padding:32px;background:#F5EFE4;">
-            <div style="background:#0D4F4A;padding:24px;text-align:center;margin-bottom:24px;">
-              <h1 style="color:#F5EFE4;font-family:Georgia,serif;font-weight:300;letter-spacing:4px;margin:0;">IMAKSA</h1>
-              <p style="color:#C9A84C;font-size:11px;letter-spacing:3px;text-transform:uppercase;margin:4px 0 0;">${meta.title}</p>
-            </div>
-            <table style="width:100%;border-collapse:collapse;">
-              <tr><td style="padding:10px 0;border-bottom:1px solid rgba(13,79,74,.12);font-size:12px;color:#8A8A8A;text-transform:uppercase;letter-spacing:1px;">Name</td><td style="padding:10px 0;border-bottom:1px solid rgba(13,79,74,.12);font-size:14px;color:#0A0A0A;font-weight:500;">${name}</td></tr>
-              <tr><td style="padding:10px 0;border-bottom:1px solid rgba(13,79,74,.12);font-size:12px;color:#8A8A8A;text-transform:uppercase;letter-spacing:1px;">Email</td><td style="padding:10px 0;border-bottom:1px solid rgba(13,79,74,.12);font-size:14px;color:#0D4F4A;">${email}</td></tr>
-              <tr><td style="padding:10px 0;border-bottom:1px solid rgba(13,79,74,.12);font-size:12px;color:#8A8A8A;text-transform:uppercase;letter-spacing:1px;">Phone</td><td style="padding:10px 0;border-bottom:1px solid rgba(13,79,74,.12);font-size:14px;color:#0A0A0A;">${phone || '—'}</td></tr>
-              <tr><td style="padding:10px 0;border-bottom:1px solid rgba(13,79,74,.12);font-size:12px;color:#8A8A8A;text-transform:uppercase;letter-spacing:1px;">Interest</td><td style="padding:10px 0;border-bottom:1px solid rgba(13,79,74,.12);font-size:14px;color:#0A0A0A;">${interest || '—'}</td></tr>
-              <tr><td style="padding:10px 0;border-bottom:1px solid rgba(13,79,74,.12);font-size:12px;color:#8A8A8A;text-transform:uppercase;letter-spacing:1px;">Budget</td><td style="padding:10px 0;border-bottom:1px solid rgba(13,79,74,.12);font-size:14px;color:#0A0A0A;">${budget || '—'}</td></tr>
-              <tr><td style="padding:10px 0;font-size:12px;color:#8A8A8A;text-transform:uppercase;letter-spacing:1px;">Message</td><td style="padding:10px 0;font-size:14px;color:#0A0A0A;">${message || '—'}</td></tr>
-            </table>
-            <div style="margin-top:24px;padding:16px;background:#0D4F4A;text-align:center;">
-              <a href="mailto:${email}?subject=Re: Your Property Enquiry - IMAKSA" style="color:#C9A84C;font-size:12px;letter-spacing:2px;text-transform:uppercase;">Reply to ${name}</a>
-            </div>
-          </div>
+          <table width="100%" cellpadding="0" cellspacing="0" style="background:#F5EFE4;padding:32px 0;"><tr><td align="center">
+          <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;">
+            <tr><td style="background:#0D4F4A;padding:28px 32px;text-align:center;">
+              <div style="font-family:Georgia,serif;font-size:28px;font-weight:300;letter-spacing:6px;color:#F5EFE4;margin:0;">IMAKSA</div>
+              <div style="font-family:Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#C9A84C;margin-top:6px;">${meta.title}</div>
+            </td></tr>
+            <tr><td style="background:#ffffff;padding:0 32px;">
+              <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td width="35%" style="padding:12px 0;border-bottom:1px solid #E8E0D4;font-family:Arial,sans-serif;font-size:11px;color:#8A8A8A;text-transform:uppercase;letter-spacing:1px;">Name</td>
+                  <td width="65%" style="padding:12px 0;border-bottom:1px solid #E8E0D4;font-family:Arial,sans-serif;font-size:14px;color:#0A0A0A;font-weight:bold;">${name}</td>
+                </tr>
+                <tr>
+                  <td width="35%" style="padding:12px 0;border-bottom:1px solid #E8E0D4;font-family:Arial,sans-serif;font-size:11px;color:#8A8A8A;text-transform:uppercase;letter-spacing:1px;">Email</td>
+                  <td width="65%" style="padding:12px 0;border-bottom:1px solid #E8E0D4;font-family:Arial,sans-serif;font-size:14px;"><a href="mailto:${email}" style="color:#0D4F4A;text-decoration:none;">${email}</a></td>
+                </tr>
+                <tr>
+                  <td width="35%" style="padding:12px 0;border-bottom:1px solid #E8E0D4;font-family:Arial,sans-serif;font-size:11px;color:#8A8A8A;text-transform:uppercase;letter-spacing:1px;">Phone</td>
+                  <td width="65%" style="padding:12px 0;border-bottom:1px solid #E8E0D4;font-family:Arial,sans-serif;font-size:14px;color:#0A0A0A;">${phone || '—'}</td>
+                </tr>
+                <tr>
+                  <td width="35%" style="padding:12px 0;border-bottom:1px solid #E8E0D4;font-family:Arial,sans-serif;font-size:11px;color:#8A8A8A;text-transform:uppercase;letter-spacing:1px;">Interest</td>
+                  <td width="65%" style="padding:12px 0;border-bottom:1px solid #E8E0D4;font-family:Arial,sans-serif;font-size:14px;color:#0A0A0A;">${interest || '—'}</td>
+                </tr>
+                <tr>
+                  <td width="35%" style="padding:12px 0;border-bottom:1px solid #E8E0D4;font-family:Arial,sans-serif;font-size:11px;color:#8A8A8A;text-transform:uppercase;letter-spacing:1px;">Budget</td>
+                  <td width="65%" style="padding:12px 0;border-bottom:1px solid #E8E0D4;font-family:Arial,sans-serif;font-size:14px;color:#0A0A0A;">${budget || '—'}</td>
+                </tr>
+                <tr>
+                  <td width="35%" style="padding:12px 0;font-family:Arial,sans-serif;font-size:11px;color:#8A8A8A;text-transform:uppercase;letter-spacing:1px;">Message</td>
+                  <td width="65%" style="padding:12px 0;font-family:Arial,sans-serif;font-size:14px;color:#0A0A0A;">${message || '—'}</td>
+                </tr>
+              </table>
+            </td></tr>
+            <tr><td style="background:#0D4F4A;padding:16px 32px;text-align:center;">
+              <a href="mailto:${email}?subject=Re: Your Property Enquiry - IMAKSA" style="font-family:Arial,sans-serif;color:#C9A84C;font-size:12px;letter-spacing:2px;text-transform:uppercase;text-decoration:none;">REPLY TO ${name.toUpperCase()}</a>
+            </td></tr>
+            <tr><td style="background:#F5EFE4;padding:16px 32px;text-align:center;">
+              <span style="font-family:Arial,sans-serif;font-size:11px;color:#8A8A8A;">IMAKSA Real Estate LLC | Business Bay, Dubai, UAE</span>
+            </td></tr>
+          </table>
+          </td></tr></table>
         `
       });
 
@@ -54,19 +79,31 @@ export async function POST(request) {
         to: email,
         subject: meta.confirmSubject,
         html: `
-          <div style="font-family:Inter,sans-serif;max-width:600px;margin:0 auto;padding:32px;background:#F5EFE4;">
-            <div style="background:#0D4F4A;padding:24px;text-align:center;margin-bottom:24px;">
-              <h1 style="color:#F5EFE4;font-family:Georgia,serif;font-weight:300;letter-spacing:4px;margin:0;">IMAKSA</h1>
-              <p style="color:#C9A84C;font-size:11px;letter-spacing:3px;text-transform:uppercase;margin:4px 0 0;">Real Estate LLC</p>
-            </div>
-            <h2 style="font-family:Georgia,serif;font-weight:300;color:#0D4F4A;font-size:24px;margin-bottom:16px;">Thank you, ${name}!</h2>
-            <p style="color:#4A4A4A;line-height:1.8;margin-bottom:16px;">${meta.confirmBody}</p>
-            <p style="color:#4A4A4A;line-height:1.8;margin-bottom:24px;">In the meantime, feel free to browse our latest listings at <a href="https://imaksa.ae" style="color:#0D4F4A;">imaksa.ae</a></p>
-            <div style="border-top:1px solid rgba(13,79,74,.15);padding-top:16px;margin-top:16px;">
-              <p style="color:#8A8A8A;font-size:12px;margin:4px 0;">📞 ${process.env.CLIENT_EMAIL}</p>
-              <p style="color:#8A8A8A;font-size:12px;margin:4px 0;">🌐 imaksa.ae</p>
-            </div>
-          </div>
+          <table width="100%" cellpadding="0" cellspacing="0" style="background:#F5EFE4;padding:32px 0;"><tr><td align="center">
+          <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;">
+            <tr><td style="background:#0D4F4A;padding:28px 32px;text-align:center;">
+              <div style="font-family:Georgia,serif;font-size:28px;font-weight:300;letter-spacing:6px;color:#F5EFE4;margin:0;">IMAKSA</div>
+              <div style="font-family:Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#C9A84C;margin-top:6px;">REAL ESTATE LLC</div>
+            </td></tr>
+            <tr><td style="background:#ffffff;padding:32px;">
+              <div style="font-family:Georgia,serif;font-size:24px;font-weight:300;color:#0D4F4A;margin-bottom:16px;">Thank you, ${name}!</div>
+              <p style="font-family:Arial,sans-serif;color:#4A4A4A;line-height:1.8;margin:0 0 16px;">${meta.confirmBody}</p>
+              <p style="font-family:Arial,sans-serif;color:#4A4A4A;line-height:1.8;margin:0 0 24px;">In the meantime, feel free to browse our latest listings at <a href="https://imaksa.ae" style="color:#0D4F4A;text-decoration:none;">imaksa.ae</a></p>
+              <table cellpadding="0" cellspacing="0" style="margin:0 auto 8px;"><tr>
+                <td style="background:#0D4F4A;padding:14px 32px;text-align:center;">
+                  <a href="https://imaksa.ae" style="font-family:Arial,sans-serif;color:#C9A84C;font-size:12px;letter-spacing:2px;text-transform:uppercase;text-decoration:none;">VISIT IMAKSA.AE</a>
+                </td>
+              </tr></table>
+            </td></tr>
+            <tr><td style="background:#F5EFE4;padding:20px 32px;text-align:center;">
+              <p style="font-family:Arial,sans-serif;font-size:13px;color:#4A4A4A;margin:0 0 6px;">&#9993; <a href="mailto:sales@imaksa.ae" style="color:#0D4F4A;text-decoration:none;">sales@imaksa.ae</a></p>
+              <p style="font-family:Arial,sans-serif;font-size:13px;color:#4A4A4A;margin:0;">&#127760; <a href="https://imaksa.ae" style="color:#0D4F4A;text-decoration:none;">imaksa.ae</a></p>
+            </td></tr>
+            <tr><td style="background:#F5EFE4;padding:12px 32px;text-align:center;border-top:1px solid #E8E0D4;">
+              <span style="font-family:Arial,sans-serif;font-size:11px;color:#8A8A8A;">Suite 701, Churchill Executive Towers, Business Bay, Dubai, UAE</span>
+            </td></tr>
+          </table>
+          </td></tr></table>
         `
       });
     } catch (emailError) {
