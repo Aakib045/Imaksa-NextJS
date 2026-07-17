@@ -2,7 +2,6 @@ import { Inter, Fraunces } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import WhatsAppButton from "@/components/WhatsAppButton";
 import Cursor from "@/components/Cursor";
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { GoogleAnalytics } from '@next/third-parties/google';
@@ -118,7 +117,6 @@ export default function RootLayout({ children }) {
           {children}
         </main>
         <Footer />
-        <WhatsAppButton />
         <SpeedInsights />
       </body>
       <GoogleAnalytics gaId="G-XXXXXXXXXX" />

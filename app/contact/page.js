@@ -124,6 +124,8 @@ function ContactPageContent() {
   const hrs = settings.hrs || ''
   const mapsUrl = settings.maps || DEFAULT_MAPS
 
+  const waVal = settings.wa || ''
+
   const contactItems = [
     { icon: '📍', label: 'OFFICE ADDRESS', value: addrDisplay },
     {
@@ -136,6 +138,11 @@ function ContactPageContent() {
       label: 'EMAIL',
       value: <a href={`mailto:${emailVal}`} style={{ color: '#F5EFE4', textDecoration: 'none' }}>{emailVal}</a>,
     },
+    ...(waVal ? [{
+      icon: '💬',
+      label: 'WHATSAPP',
+      value: <a href={`https://wa.me/${waVal}`} target="_blank" rel="noopener noreferrer" style={{ color: '#F5EFE4', textDecoration: 'none' }}>{waVal}</a>,
+    }] : []),
     { icon: '🕐', label: 'WORKING HOURS', value: hrs },
   ]
 
