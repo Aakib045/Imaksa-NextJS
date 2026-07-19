@@ -60,12 +60,11 @@ export const metadata = {
   },
   icons: {
     icon: [
-      { url: '/favicon-96.png', sizes: '96x96', type: 'image/png' },
-      { url: '/favicon-48.png', sizes: '48x48', type: 'image/png' },
+      { url: '/favicon.svg', type: 'image/svg+xml' },
       { url: '/favicon-32.png', sizes: '32x32', type: 'image/png' },
       { url: '/favicon-16.png', sizes: '16x16', type: 'image/png' },
     ],
-    shortcut: '/favicon-96.png',
+    shortcut: '/favicon.svg',
     apple: '/apple-touch-icon.png',
   },
 };
