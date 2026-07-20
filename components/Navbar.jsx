@@ -75,7 +75,7 @@ function NavInner() {
       >
         <div
           style={{
-            maxWidth: 1280,
+            maxWidth: 1100,
             margin: '0 auto',
             padding: '0 clamp(16px,3vw,48px)',
             display: 'flex',
