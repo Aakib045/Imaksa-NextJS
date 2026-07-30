@@ -1,6 +1,6 @@
 import sharp from 'sharp';
 
-await sharp('public/new.jpg')
+await sharp('public/logo-icon.jpg')
   .resize(32, 32)
   .png()
   .toFile('public/favicon-32.png');
