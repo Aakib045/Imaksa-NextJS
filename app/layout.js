@@ -62,9 +62,9 @@ export const metadata = {
     canonical: 'https://www.imaksa.ae',
   },
   icons: {
-    icon: '/logo-icon.png',
-    shortcut: '/logo-icon.png',
-    apple: '/logo-icon.png',
+    icon: '/imaksa-favicon.png',
+    shortcut: '/imaksa-favicon.png',
+    apple: '/imaksa-favicon.png',
   },
 };
 
