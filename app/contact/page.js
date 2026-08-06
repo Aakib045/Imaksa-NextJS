@@ -61,6 +61,7 @@ function ContactPageContent() {
   const [btnState, setBtnState] = useState('idle')
   const [showSuccess, setShowSuccess] = useState(false)
   const [openFaq, setOpenFaq] = useState(null)
+  const [honeypot, setHoneypot] = useState('')
 
   useEffect(() => {
     fetch('/api/settings', { cache: 'no-store' })
@@ -84,6 +85,7 @@ function ContactPageContent() {
           budget: priceParam || budget,
           message,
           source: 'website',
+          website_url: honeypot,
         }),
       })
       const data = await res.json()
@@ -434,6 +436,16 @@ function ContactPageContent() {
               height: 'clamp(100px,12vw,130px)',
               resize: 'none',
             }}
+          />
+
+          <input
+            type="text"
+            name="website_url"
+            value={honeypot}
+            onChange={e => setHoneypot(e.target.value)}
+            style={{ position: 'absolute', left: '-9999px', opacity: 0 }}
+            tabIndex={-1}
+            autoComplete="off"
           />
 
           {showSuccess && (

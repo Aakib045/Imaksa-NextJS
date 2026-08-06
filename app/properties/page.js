@@ -291,6 +291,7 @@ function PropertiesContent() {
   const [formData, setFormData] = useState({ firstName: '', lastName: '', email: '', phone: '', budget: '', location: '', message: '' })
   const [btnState, setBtnState] = useState('idle')
   const [showSuccess, setShowSuccess] = useState(false)
+  const [honeypot, setHoneypot] = useState('')
 
   useEffect(() => {
     fetch('/api/settings', { cache: 'no-store' })
@@ -358,6 +359,7 @@ function PropertiesContent() {
           message: combinedMessage,
           source: content.source,
           interest: content.interest,
+          website_url: honeypot,
         }),
       })
       const data = await res.json()
@@ -583,6 +585,16 @@ function PropertiesContent() {
                 value={formData.message}
                 onChange={e => setFormData(p => ({ ...p, message: e.target.value }))}
                 style={{ ...inputStyle, resize: 'vertical' }}
+              />
+
+              <input
+                type="text"
+                name="website_url"
+                value={honeypot}
+                onChange={e => setHoneypot(e.target.value)}
+                style={{ position: 'absolute', left: '-9999px', opacity: 0 }}
+                tabIndex={-1}
+                autoComplete="off"
               />
 
               <div

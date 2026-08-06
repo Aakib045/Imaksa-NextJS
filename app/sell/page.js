@@ -82,6 +82,7 @@ export default function SellPage() {
   const [btnState, setBtnState] = useState('idle')
   const [error, setError] = useState('')
   const [showSuccess, setShowSuccess] = useState(false)
+  const [honeypot, setHoneypot] = useState('')
   const { is768 } = useBreakpoints()
 
   useEffect(() => {
@@ -102,7 +103,7 @@ export default function SellPage() {
       const res = await fetch('/api/sellrequests', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, phone, location, propertyType, size, askingPrice, notes }),
+        body: JSON.stringify({ name, email, phone, location, propertyType, size, askingPrice, notes, website_url: honeypot }),
       })
       const data = await res.json()
       if (data.success) {
@@ -322,6 +323,16 @@ export default function SellPage() {
               onChange={e => setNotes(e.target.value)}
               rows={4}
               style={{ ...inputStyle, resize: 'vertical' }}
+            />
+
+            <input
+              type="text"
+              name="website_url"
+              value={honeypot}
+              onChange={e => setHoneypot(e.target.value)}
+              style={{ position: 'absolute', left: '-9999px', opacity: 0 }}
+              tabIndex={-1}
+              autoComplete="off"
             />
 
             {error && (

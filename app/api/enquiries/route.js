@@ -3,10 +3,46 @@ import Enquiry from '@/models/Enquiry';
 import { verifyAuth } from '@/lib/auth';
 import { Resend } from 'resend';
 
+const ipRequests = new Map()
+const emailRequests = new Map()
+
+function isRateLimited(ip) {
+  const now = Date.now()
+  const times = (ipRequests.get(ip) || []).filter(t => now - t < 3600000)
+  if (times.length >= 3) return true
+  ipRequests.set(ip, [...times, now])
+  return false
+}
+
+function isSpam({ name, email, message, website_url }) {
+  if (website_url) return true
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  if (email && !emailRegex.test(email)) return true
+  if (email) {
+    const now = Date.now()
+    const times = (emailRequests.get(email) || []).filter(t => now - t < 600000)
+    if (times.length >= 2) return true
+    emailRequests.set(email, [...times, now])
+  }
+  if (name) {
+    if (/[bcdfghjklmnpqrstvwxyz]{6,}/i.test(name.replace(/\s/g, ''))) return true
+    if (/\.\s*\.\s*\./.test(name)) return true
+  }
+  return false
+}
+
 export async function POST(request) {
   try {
-    const { name, email, phone, interest, budget, message, source } = await request.json();
-    const ip = request.headers.get('x-forwarded-for') || '';
+    const body = await request.json();
+    const { name, email, phone, interest, budget, message, source, website_url } = body;
+    const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown';
+
+    if (isRateLimited(ip)) {
+      return Response.json({ success: false, error: 'Too many requests, please try again later' }, { status: 429 });
+    }
+    if (isSpam({ name, email, message, website_url })) {
+      return Response.json({ success: true }, { status: 201 });
+    }
 
     const getEmailMeta = (source, interest) => {
       if (source === 'careers') return { title: 'NEW CAREER APPLICATION', subject: `New Career Application from ${name} — IMAKSA`, confirmSubject: 'Thank you for your application — IMAKSA', confirmBody: 'We have received your job application and our HR team will review it and get back to you within 48 hours.' }
