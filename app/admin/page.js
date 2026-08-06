@@ -83,7 +83,7 @@ button,input,textarea,select{font-family:'Inter',sans-serif;}
 .sf-out{margin-left:auto;background:none;border:none;color:rgba(245,239,228,.5);font-size:18px;cursor:pointer;transition:color .3s;padding:4px;}
 .sf-out:hover{color:var(--cream);}
 .main{margin-left:var(--sidebar);min-height:100vh;background:var(--white);}
-.topbar{background:var(--cream);border-bottom:1px solid var(--border);padding:0 clamp(16px,3vw,32px);height:54px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;box-shadow:0 1px 8px rgba(13,79,74,.06);}
+.topbar{background:var(--cream);border-bottom:1px solid var(--border);padding:0 clamp(16px,3vw,32px);height:54px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 1px 8px rgba(13,79,74,.06);}
 .topbar-left{display:flex;align-items:center;gap:12px;}
 .topbar-title{font-family:'Fraunces',serif;font-size:clamp(16px,2vw,20px);font-weight:300;color:var(--teal);}
 .topbar-right{display:flex;align-items:center;gap:10px;}
