@@ -324,16 +324,30 @@ export default function AdminPage() {
   }, [token, showToast])
 
   useEffect(() => {
-    const nav = document.querySelector('nav')
-    const footer = document.querySelector('footer')
-    const wa = document.querySelector('a[aria-label="Chat on WhatsApp"]')
-    const ring = document.querySelector('.custom-ring')
-    if (nav) nav.style.display = 'none'
-    if (footer) footer.style.display = 'none'
-    if (wa) wa.style.display = 'none'
-    if (ring) ring.style.display = 'none'
+    const hideElements = () => {
+      const nav = document.querySelector('nav')
+      const footer = document.querySelector('footer')
+      const wa = document.querySelector('a[aria-label="Chat on WhatsApp"]')
+      const ring = document.querySelector('.custom-ring')
+      if (nav) nav.style.display = 'none'
+      if (footer) footer.style.display = 'none'
+      if (wa) wa.style.display = 'none'
+      if (ring) ring.style.display = 'none'
+    }
+
+    hideElements()
+    const interval = setInterval(hideElements, 100)
+    const timeout = setTimeout(() => clearInterval(interval), 3000)
+
     document.body.style.overflow = ''
+
     return () => {
+      clearInterval(interval)
+      clearTimeout(timeout)
+      const nav = document.querySelector('nav')
+      const footer = document.querySelector('footer')
+      const wa = document.querySelector('a[aria-label="Chat on WhatsApp"]')
+      const ring = document.querySelector('.custom-ring')
       if (nav) nav.style.display = ''
       if (footer) footer.style.display = ''
       if (wa) wa.style.display = ''
