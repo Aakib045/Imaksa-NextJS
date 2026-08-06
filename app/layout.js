@@ -61,6 +61,11 @@ export const metadata = {
   alternates: {
     canonical: 'https://www.imaksa.ae',
   },
+  icons: {
+    icon: '/imaksa-favicon.png',
+    shortcut: '/imaksa-favicon.png',
+    apple: '/imaksa-favicon.png',
+  },
 };
 
 export const viewport = {
