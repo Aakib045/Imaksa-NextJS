@@ -59,7 +59,7 @@ export const metadata = {
     google: '_pwV9S2EFZCMzH6EL0Q8-8WenmWy4gNmMevvibZXh1c',
   },
   alternates: {
-    canonical: 'https://www.imaksa.ae',
+    canonical: 'https://imaksa.ae',
   },
 };
 
