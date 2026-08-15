@@ -3,7 +3,6 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Cursor from "@/components/Cursor";
-import { SpeedInsights } from '@vercel/speed-insights/next';
 import { GoogleAnalytics } from '@next/third-parties/google';
 
 const inter = Inter({
@@ -24,6 +23,14 @@ export const metadata = {
   creator: 'IMAKSA Real Estate LLC',
   publisher: 'IMAKSA Real Estate LLC',
   metadataBase: new URL('https://imaksa.ae'),
+  icons: {
+  icon: [
+    { url: "/favicon.ico", sizes: "any" },
+    { url: "/favicon-32.png", sizes: "32x32", type: "image/png" },
+    { url: "/favicon-16.png", sizes: "16x16", type: "image/png" },
+  ],
+  apple: "/apple-touch-icon.png",
+},
   openGraph: {
     type: 'website',
     locale: 'en_US',
@@ -112,7 +119,6 @@ export default function RootLayout({ children }) {
           {children}
         </main>
         <Footer />
-        <SpeedInsights />
       </body>
       <GoogleAnalytics gaId="G-PET39JQQJV" />
     </html>
