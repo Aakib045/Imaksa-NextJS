@@ -41,7 +41,7 @@ export const metadata = {
       "Dubai's trusted real estate partner. Buy, Sell, Rent, and discover off-plan properties across Palm Jumeirah, Downtown Dubai, Dubai Marina and more.",
     images: [
       {
-        url: "/og-image.jpg",
+      url: "https://imaksa.ae/og-image.jpg",
         width: 1200,
         height: 630,
         alt: "IMAKSA Real Estate Dubai",
@@ -54,7 +54,7 @@ export const metadata = {
     title: "IMAKSA Properties | Dubai Real Estate",
     description:
       "Dubai's trusted real estate partner. Buy, Sell, Rent, and discover off-plan properties across Palm Jumeirah, Downtown Dubai, Dubai Marina and more.",
-    images: ["/og-image.jpg"],
+      images: ["https://imaksa.ae/og-image.jpg"],
   },
 
   robots: {
