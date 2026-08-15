@@ -31,42 +31,50 @@ export const metadata = {
   ],
   apple: "/apple-touch-icon.png",
 },
-  openGraph: {
-    type: 'website',
-    locale: 'en_US',
-    url: 'https://imaksa.ae',
-    siteName: 'IMAKSA Properties',
-    title: 'IMAKSA Properties — Dubai Real Estate | Buy, Rent & Sell',
-    description: 'Dubai\'s trusted real estate partner. Buy, rent, sell, and discover off-plan properties across Palm Jumeirah, Downtown Dubai, Dubai Marina and more.',
-    images: [{
-      url: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1200&q=80',
-      width: 1200,
-      height: 630,
-      alt: 'IMAKSA Properties Dubai',
-    }],
+    openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://imaksa.ae",
+    siteName: "IMAKSA Properties",
+    title: "IMAKSA Properties | Dubai Real Estate | Buy, Sell & Rent",
+    description:
+      "Dubai's trusted real estate partner. Buy, Sell, Rent, and discover off-plan properties across Palm Jumeirah, Downtown Dubai, Dubai Marina and more.",
+    images: [
+      {
+        url: "/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "IMAKSA Real Estate Dubai",
+      },
+    ],
   },
+
   twitter: {
-    card: 'summary_large_image',
-    title: 'IMAKSA Properties — Dubai Real Estate',
-    description: 'Dubai\'s trusted real estate partner. Buy, rent, sell, and discover off-plan properties.',
-    images: ['https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1200&q=80'],
+    card: "summary_large_image",
+    title: "IMAKSA Properties | Dubai Real Estate",
+    description:
+      "Dubai's trusted real estate partner. Buy, Sell, Rent, and discover off-plan properties across Palm Jumeirah, Downtown Dubai, Dubai Marina and more.",
+    images: ["/og-image.jpg"],
   },
+
   robots: {
     index: true,
     follow: true,
     googleBot: {
       index: true,
       follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
     },
   },
+
   verification: {
-    google: '_pwV9S2EFZCMzH6EL0Q8-8WenmWy4gNmMevvibZXh1c',
+    google: "_pwV9S2EFZCMzH6EL0Q8-8WenmWy4gNmMevvibZXh1c",
   },
+
   alternates: {
-    canonical: 'https://imaksa.ae',
+    canonical: "https://imaksa.ae",
   },
 };
 
