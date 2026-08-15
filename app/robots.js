@@ -4,12 +4,12 @@ export default function robots() {
       {
         userAgent: '*',
         allow: '/',
-        disallow: ['/admin', '/api/'],
+        disallow: ['/admin'],
       },
       {
         userAgent: 'Googlebot',
         allow: '/',
-        disallow: ['/admin', '/api/'],
+        disallow: ['/admin'],
       },
     ],
     sitemap: 'https://imaksa.ae/sitemap.xml',
