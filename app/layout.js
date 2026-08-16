@@ -91,6 +91,7 @@ export default function RootLayout({ children }) {
     name: 'IMAKSA Real Estate LLC',
     description: "Dubai's trusted real estate partner specializing in luxury properties, off-plan investments and property management.",
     url: 'https://imaksa.ae',
+    image: 'https://imaksa.ae/og-image.jpg',
     telephone: '+97142669295',
     address: {
       '@type': 'PostalAddress',
