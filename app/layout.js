@@ -16,7 +16,7 @@ const fraunces = Fraunces({
 });
 
 export const metadata = {
-  title: 'IMAKSA Properties — Dubai Real Estate | Buy, Rent & Sell',
+  title: 'IMAKSA Properties — Luxury Dubai Real Estate | Buy, Sell & Rent',
   description: 'IMAKSA — Dubai\'s trusted real estate partner. Buy, rent, sell, and discover off-plan properties across Palm Jumeirah, Downtown Dubai, Dubai Marina and more.',
   keywords: 'Dubai real estate, buy property Dubai, rent property Dubai, off-plan Dubai, luxury villas Dubai, IMAKSA properties',
   authors: [{ name: 'IMAKSA Properties' }],
@@ -36,7 +36,7 @@ export const metadata = {
     locale: "en_US",
     url: "https://imaksa.ae",
     siteName: "IMAKSA Properties",
-    title: "IMAKSA Properties | Dubai Real Estate | Buy, Sell & Rent",
+    title: "IMAKSA Properties | Luxury Dubai Real Estate | Buy, Sell & Rent",
     description:
       "Dubai's trusted real estate partner. Buy, Sell, Rent, and discover off-plan properties across Palm Jumeirah, Downtown Dubai, Dubai Marina and more.",
     images: [
