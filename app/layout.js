@@ -22,7 +22,7 @@ export const metadata = {
   authors: [{ name: 'IMAKSA Properties' }],
   creator: 'IMAKSA Real Estate LLC',
   publisher: 'IMAKSA Real Estate LLC',
-  metadataBase: new URL('https://www.imaksa.ae'),
+  metadataBase: new URL('https://imaksa.ae'),
   icons: {
   icon: [
     { url: "/favicon.ico", sizes: "any" },
@@ -74,7 +74,7 @@ export const metadata = {
   },
 
   alternates: {
-    canonical: "https://www.imaksa.ae",
+    canonical: "https://imaksa.ae",
   },
 };
 
