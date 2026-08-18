@@ -45,6 +45,21 @@ const nextConfig = {
       },
     ]
   },
+  async redirects() {
+    return [
+      {
+        source: '/:path*',
+        has: [
+          {
+            type: 'host',
+            value: 'imaksa.ae',
+          },
+        ],
+        destination: 'https://www.imaksa.ae/:path*',
+        permanent: true,
+      },
+    ]
+  },
   images: {
     remotePatterns: [
       { protocol: 'https', hostname: 'images.unsplash.com' },
